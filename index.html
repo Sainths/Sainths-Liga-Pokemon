@@ -98,20 +98,31 @@
       margin-top: 5px;
     }
 
-    /* Força o grid de estatísticas (Partidas, Insígnias e Mestre) a abrir na largura total */
+/* Força o grid de estatísticas a abrir na largura total */
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-bottom: 15px;
-  width: 100%; /* Ocupa toda a largura do painel de 600px */
+  width: 100%; /* Ocupa toda a largura do painel */
   box-sizing: border-box;
 }
 
-/* Garante que o bloco de Mestre das Insígnias (Shark) se estique corretamente */
+/* COMPONENTE ADICIONADO: Traz de volta o fundo e a borda neon das caixas menores */
+.stat-item {
+  background: rgba(10, 46, 92, 0.4);
+  border: 1px solid var(--azul-neon);
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center; /* Centraliza os números dentro de cada caixinha */
+}
+
+/* Garante que o bloco de Mestre das Insígnias (Shark) fique grande com a borda vermelha original */
 .stat-item.shark {
   grid-column: span 2;
   width: 100%;
+  border-color: var(--vermelho-liga);
+  box-shadow: 0 0 10px rgba(255, 31, 31, 0.3);
 }
 
 /* Força a seção de Feed da Liga e Regras VGC a abrir no tamanho grande original */
