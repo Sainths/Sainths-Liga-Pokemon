@@ -98,32 +98,47 @@
       margin-top: 5px;
     }
 
-/* Força o grid de estatísticas a abrir na largura total */
+/* Dá um distanciamento confortável para o texto não colar nas bordas */
+.scroll-area {
+  height: 80px;
+  padding: 10px 15px; /* Adicionado 15px nas laterais para afastar da borda */
+  overflow-y: auto;
+  font-size: 0.8rem;
+  color: #e5e9f0;
+  box-sizing: border-box; /* Garante que o padding não aumente o tamanho da caixa */
+}
+
+/* Força o grid de estatísticas a se comportar perfeitamente no painel */
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-bottom: 15px;
-  width: 100%; /* Ocupa toda a largura do painel */
+  width: 100%;
   box-sizing: border-box;
 }
 
-/* COMPONENTE ADICIONADO: Traz de volta o fundo e a borda neon das caixas menores */
+/* Garante o alinhamento centralizado de cada caixinha individual */
 .stat-item {
   background: rgba(10, 46, 92, 0.4);
   border: 1px solid var(--azul-neon);
   padding: 10px;
   border-radius: 5px;
-  text-align: center; /* Centraliza os números dentro de cada caixinha */
+  text-align: center;
+  box-sizing: border-box;
 }
 
-/* Garante que o bloco de Mestre das Insígnias (Shark) fique grande com a borda vermelha original */
+/* CORREÇÃO DO MESTRE DAS INSÍGNIAS: Força o bloco a se alinhar e centralizar perfeitamente */
 .stat-item.shark {
   grid-column: span 2;
   width: 100%;
   border-color: var(--vermelho-liga);
   box-shadow: 0 0 10px rgba(255, 31, 31, 0.3);
+  text-align: center;
+  display: block; /* Garante que se comporte como um bloco firme no grid */
+  box-sizing: border-box;
 }
+
 
 /* Força a seção de Feed da Liga e Regras VGC a abrir no tamanho grande original */
 .info-section {
