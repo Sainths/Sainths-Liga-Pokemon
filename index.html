@@ -98,26 +98,39 @@
       margin-top: 5px;
     }
 
-    /* Grid de Status da Batalha */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
+    /* Força o grid de estatísticas (Partidas, Insígnias e Mestre) a abrir na largura total */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 15px;
+  width: 100%; /* Ocupa toda a largura do painel de 600px */
+  box-sizing: border-box;
+}
 
-    .stat-item {
-      background: rgba(10, 46, 92, 0.4);
-      border: 1px solid var(--azul-neon);
-      padding: 10px;
-      border-radius: 5px;
-    }
+/* Garante que o bloco de Mestre das Insígnias (Shark) se estique corretamente */
+.stat-item.shark {
+  grid-column: span 2;
+  width: 100%;
+}
 
-    .shark {
-      grid-column: span 2;
-      border-color: var(--vermelho-liga);
-      box-shadow: 0 0 10px rgba(255, 31, 31, 0.3);
-    }
+/* Força a seção de Feed da Liga e Regras VGC a abrir no tamanho grande original */
+.info-section {
+  background: #020813;
+  border: 1px solid var(--azul-neon);
+  border-radius: 5px;
+  text-align: left;
+  width: 100%; /* Abre o feed na largura total horizontal */
+  box-sizing: border-box;
+  margin-bottom: 15px;
+}
+
+/* Garante que o botão de entrar na fila ocupe a barra inteira inferior */
+.btn-battle {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 
     /* Mural de Avisos Globais da Liga */
     .info-section {
