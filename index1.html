@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon Champions League - VGC</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    :root {
+      --azul-arena: #0a2e5c;
+      --azul-neon: #00bfff;
+      --vermelho-liga: #ff1f1f;
+      --amarelo-campeao: #ffde00;
+      --fundo-escuro: #060e18;
+      --cinza-card: rgba(13, 27, 42, 0.9);
+    }
+
+    body {
+      background-color: var(--fundo-escuro);
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-image: radial-gradient(circle, var(--azul-arena) 0%, var(--fundo-escuro) 85%);
+      min-height: 100vh;
+    }
+
+    .app-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid var(--azul-neon);
+      box-shadow: 0 0 15px var(--azul-neon);
+      margin-bottom: 10px;
+      background-color: var(--fundo-escuro);
+    }
+
+    /* Organização do Pódio do Torneio VGC */
+    .podium-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .podium-card {
+      background: var(--cinza-card);
+      border-radius: 8px;
+      padding: 10px;
+      flex: 1;
+      text-align: center;
+      border: 1px solid #1b4965;
+    }
+
+    .gold {
+      border: 2px solid var(--amarelo-campeao);
+      box-shadow: 0 0 15px var(--amarelo-campeao);
+      transform: scale(1.1);
+      z-index: 2;
+    }
+
+    .silver {
+      border: 1px solid #aaa;
+      opacity: 0.9;
+    }
+
+    .bronze {
+      border: 1px solid #cd7f32;
+      opacity: 0.9;
+    }
+
+    .title-badge {
+      font-size: 0.6rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .rank-name {
+      font-size: 0.9rem;
+      color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Alterado de deck para team (Time VGC) */
+    .rank-team {
+      font-size: 0.65rem;
+      color: #88c0d0;
+    }
+
+    .rank-stars {
+      color: var(--amarelo-campeao);
+      font-size: 0.8rem;
+      margin-top: 5px;
+    }
+
+    /* Grid de Status da Batalha */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .stat-item {
+      background: rgba(10, 46, 92, 0.4);
+      border: 1px solid var(--azul-neon);
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .shark {
+      grid-column: span 2;
+      border-color: var(--vermelho-liga);
+      box-shadow: 0 0 10px rgba(255, 31, 31, 0.3);
+    }
+
+    /* Mural de Avisos Globais da Liga */
+    .info-section {
+      background: #020813;
+      border: 1px solid var(--azul-neon);
+      border-radius: 5px;
+      text-align: left;
+    }
+
+    .scroll-area {
+      height: 80px;
+      padding: 10px;
+      overflow-y: auto;
+      font-size: 0.8rem;
+      color: #e5e9f0;
+    }
+
+    /* Botão Principal de Registrar Partida VGC */
+    .btn-battle {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(to right, #b31212, var(--vermelho-liga));
+      color: white;
+      font-weight: bold;
+      border: 2px solid var(--amarelo-campeao);
+      cursor: pointer;
+      border-radius: 5px;
+      text-shadow: 1px 1px 2px black;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: 0.2s;
+    }
+
+    .btn-battle:active {
+      transform: scale(0.98);
+    }
+
+    /* Estilo da Tabela de Classificação */
+    .ranking-container {
+      margin-top: 15px;
+      border: 1px solid rgba(0, 191, 255, 0.3);
+      border-radius: 10px;
+      background: rgba(6, 14, 24, 0.95);
+      overflow: hidden;
+      width: 95%;
+      max-width: 500px;
+    }
+
+    .ranking-header {
+      background: var(--azul-arena);
+      color: var(--azul-neon);
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 15px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      border-bottom: 1px solid var(--azul-neon);
+    }
+
+    .ranking-scroll {
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .ranking-title {
+      color: var(--azul-neon);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 1.2rem;
+      text-align: center;
+      margin: 20px 0 10px 0;
+      text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .ranking-title::before, .ranking-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--azul-neon), transparent);
+    }
+
+    .ranking-row-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      border-bottom: 1px solid rgba(0, 191, 255, 0.1);
+      text-align: left;
+    }
+
+    /* O Líder do Ranking ganha destaque de Campeão */
+    .ranking-row-item:nth-child(1) {
+      background: rgba(255, 222, 0, 0.08);
+      border-left: 3px solid var(--amarelo-campeao);
+    }
+
+    .ranking-row-item:nth-child(1) .rank-number {
+      color: var(--amarelo-campeao);
+    }
+
+    .rank-stats-row {
+      display: flex;
+      gap: 5px;
+      margin-top: 4px;
+    }
+
+    .stat-tag {
+      font-size: 0.6rem;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 4px;
+      border-radius: 3px;
+      color: #d8dee9;
+    }
+
+    .ranking-info {
+      text-align: left;
+    }
+
+    .rank-number {
+      color: var(--azul-neon);
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .team-name {
+      font-size: 0.7rem;
+      display: block;
+      color: #81a1c1;
+    }
+  </style>
+</head>
+  .rank-team-sub { display: block; font-size: 0.65rem; color: #88c0d0; }
+  
+  .container { 
+    width: 90%; 
+    max-width: 400px; 
+    margin-top: 50px; 
+    padding: 20px; 
+    border: 2px solid var(--azul-neon); 
+    border-radius: 15px; 
+    background: rgba(6, 14, 24, 0.95); 
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.4); 
+    text-align: center; 
+  }
+
+  h1 { 
+    color: var(--azul-neon); 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    text-shadow: 2px 2px #000, 0 0 10px rgba(0, 191, 255, 0.6); 
+    font-size: 1.5rem; 
+  }
+
+  .input-group { margin: 15px 0; text-align: left; }
+  
+  label { 
+    display: block; 
+    color: #e5e9f0; 
+    margin-bottom: 5px; 
+    font-weight: bold; 
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  input { 
+    width: 100%; 
+    padding: 10px; 
+    background: #132237; 
+    border: 1px solid var(--azul-arena); 
+    color: white; 
+    border-radius: 5px; 
+    box-sizing: border-box; 
+    transition: 0.3s;
+  }
+
+  input:focus {
+    border-color: var(--azul-neon);
+    box-shadow: 0 0 8px rgba(0, 191, 255, 0.5);
+    outline: none;
+  }
+
+  button { 
+    width: 100%; 
+    padding: 12px; 
+    background: linear-gradient(to bottom, var(--azul-neon), #05668d); 
+    border: none; 
+    color: white; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    cursor: pointer; 
+    border-radius: 5px; 
+    margin-top: 10px; 
+    transition: 0.3s; 
+    text-shadow: 1px 1px 2px black;
+  }
+
+  button:hover { 
+    background: linear-gradient(to bottom, #00d2ff, var(--azul-neon)); 
+    transform: scale(1.02); 
+  }
+
+  /* Garante o visual das tags de status no Ranking */
+  .stat-tag { 
+    font-size: 0.65rem; 
+    background: rgba(0, 191, 255, 0.1); 
+    padding: 2px 6px; 
+    border-radius: 4px; 
+    border: 1px solid rgba(0, 191, 255, 0.3); 
+    color: #e5e9f0; 
+    margin-right: 4px; 
+  }
+
+  #custom-notification { 
+    position: fixed; 
+    top: 20px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background: linear-gradient(145deg, #0d1b2a, #060e18); 
+    border: 2px solid var(--vermelho-liga); 
+    border-radius: 8px; 
+    padding: 15px 25px; 
+    z-index: 9999; 
+    box-shadow: 0 0 15px rgba(255, 31, 31, 0.4); 
+    transition: all 0.5s ease; 
+  }
+
+  .notif-content { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    color: white; 
+    font-weight: bold; 
+    text-shadow: 1px 1px 2px black; 
+  }
+
+  #notif-icon { font-size: 1.2rem; }
+
+  .ranking-row-item { 
+    display: flex; 
+    flex-direction: column; 
+    padding: 12px; 
+    border-bottom: 1px solid rgba(0, 191, 255, 0.1); 
+    background: rgba(13, 27, 42, 0.4); 
+    margin-bottom: 5px; 
+    border-radius: 5px; 
+  }
+
+  .rank-stats-row { 
+    display: flex; 
+    gap: 8px; 
+    font-size: 0.65rem; 
+    color: #aebac7; 
+    margin-top: 4px; 
+    text-transform: uppercase; 
+  }
+
+  .win-streak { 
+    color: var(--amarelo-campeao); 
+    font-weight: bold; 
+    text-shadow: 0 0 5px rgba(255, 222, 0, 0.6); 
+    animation: pulse 1.5s infinite; 
+  }
+
+  @keyframes pulse { 
+    0% { opacity: 0.8; } 
+    50% { opacity: 1; text-shadow: 0 0 10px var(--amarelo-campeao); } 
+    100% { opacity: 0.8; } 
+  }
+
+  .winrate-high { color: #00ffcc; }
+  .duelos-warning { color: #ff9f43; }
+
+  .btn-lobby { 
+    background: var(--azul-arena); 
+    color: white; 
+    border: 1px solid var(--azul-neon); 
+    padding: 15px; 
+    width: 100%; 
+    margin-bottom: 10px; 
+    cursor: pointer; 
+  }
+
+  .btn-aposta { 
+    background: #132237; 
+    color: var(--azul-neon); 
+    border: 1px solid #1b4965; 
+    padding: 10px; 
+    cursor: pointer; 
+    font-size: 0.8rem; 
+  }
+
+  .btn-aposta:hover { 
+    border-color: var(--azul-neon); 
+    background: var(--azul-arena); 
+  }
+
+  /* Fundo fixo para qualquer modal que abrir */
+  #arena-modal, #modal-convite { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100vw; 
+    height: 100vh; 
+    background: rgba(2, 8, 19, 0.95); 
+    z-index: 10000; 
+    display: none; 
+    align-items: center; 
+    justify-content: center; 
+  }
+
+  .arena-content, .convite-content { 
+    width: 90%; 
+    max-width: 400px; 
+    background: linear-gradient(145deg, #060e18, #0d1b2a); 
+    border: 2px solid var(--azul-neon); 
+    border-radius: 15px; 
+    padding: 25px; 
+    box-shadow: 0 0 30px rgba(0, 191, 255, 0.3); 
+    position: relative; 
+  }
+
+  #status { 
+    margin-top: 15px; 
+    font-size: 0.9rem; 
+    color: var(--amarelo-campeao); 
+  }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+  <!-- TELA DE REGISTRO/LOGIN -->
+  <div id="auth-screen" class="container">
+    <img src="icone.png" alt="Logo" class="app-logo">
+    <h1>Pokémon Champions</h1>
+    
+    <div class="input-group">
+      <label>Nome do Treinador</label>
+      <input type="text" id="nome" placeholder="Ex: Red">
+    </div>
+    
+    <div class="input-group">
+      <label>Senha de Acesso</label>
+      <input type="password" id="senha" placeholder="****">
+    </div>
+    
+    <div id="registro-extra" class="hidden">
+      <div class="input-group">
+        <label>Seu Time (Apenas para novos)</label>
+        <input type="text" id="deck" placeholder="Ex: Incineroar, Zacian...">
+      </div>
+    </div>
+    
+    <button onclick="entrarNaArena()" id="btn-entrar">ENTRAR NA ARENA</button>
+    <p id="status" style="font-size: 0.8rem; margin-top: 10px; color: var(--amarelo-campeao);"></p>
+  </div>
+
+  <div id="main-screen" class="container hidden" style="max-width: 600px;">
+    <p>Bem-vindo, <span id="user-name" style="color:var(--amarelo-campeao)">Treinador</span>!</p>
+
+    <!-- Botão Secreto do Juiz (Começa escondido) -->
+    <div id="painel-admin" class="hidden" style="margin-top: 20px; padding: 15px; border: 1px dashed var(--azul-neon); border-radius: 10px; background: rgba(0, 191, 255, 0.05);">
+      <h3 style="color: var(--azul-neon); font-size: 0.9rem; margin-bottom: 10px;">PAINEL DO ORGANIZADOR</h3>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <button onclick="resetarTorneio()" style="background: #ff1f1f; color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer;">RESETAR TORNEIO</button>
+        <button onclick="limparFilaGeral()" style="background: #00bfff; color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer;">LIMPAR FILA</button>
+      </div>
+      
+      <p style="font-size: 0.6rem; color: #88c0d0; margin-top: 10px;">* O Reset apaga pontos, vitórias e o histórico de partidas.</p>
+      <hr style="border: 0; border-top: 1px solid rgba(0,191,255,0.2); margin: 15px 0;">
+      
+      <!-- Campo de Notificações -->
+      <div style="margin-bottom: 20px; width: 100%;">
+        <label style="color: #aebac7; font-size: 0.75rem; display: block; margin-bottom: 8px; text-align: left;">
+          NOTIFICAR TODOS OS TREINADORES:
+        </label>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <input type="text" id="input-global-notif" placeholder="Digite o aviso da Liga..." style="width: 100%; background: #132237; border: 1px solid var(--azul-arena); color: white; padding: 12px; border-radius: 5px; font-size: 0.9rem; box-sizing: border-box;">
+          <button onclick="enviarAvisoGlobal()" style="width: 100%; background: var(--azul-neon); color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; text-transform: uppercase;"> PUBLICAR AVISO </button>
+        </div>
+      </div>
+    <!-- Lista de Conflitos -->
+    <div id="lista-conflitos-admin">
+      <label style="color: #aebac7; font-size: 0.7rem; display: block; margin-bottom: 5px; text-transform: uppercase;">⚠️ CONFLITOS DE RESULTADO (Mesa do Organizador):</label>
+      <div id="container-conflitos" style="max-height: 150px; overflow-y: auto; background: rgba(13,27,42,0.5); border: 1px solid rgba(0,191,255,0.2); border-radius: 5px; padding: 5px; font-size: 0.75rem;">
+        <p style="color:#64748b; padding: 10px;">Nenhum conflito reportado entre os Treinadores.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD SUPERIOR (PÓDIO VGC) -->
+  <div class="podium-container">
+    <!-- TOP 2 -->
+    <div class="podium-card silver">
+      <div class="title-badge">🥈 Finalista</div>
+      <div class="rank-name" id="top2-nome">---</div>
+      <div class="rank-team" id="top2-deck">---</div>
+      <div class="rank-stars">🏅 <span id="top2-estrelas">0</span> Insígnias</div>
+    </div>
+    
+    <!-- TOP 1 (CAMPEÃO REGIONAL/INTERNACIONAL) -->
+    <div class="podium-card gold king">
+      <div class="title-badge" style="color: var(--amarelo-campeao);">👑 CAMPEÃO VGC</div>
+      <div class="rank-name" id="top1-nome" style="font-weight: bold; color: var(--amarelo-campeao);">---</div>
+      <div class="rank-team" id="top1-deck">---</div>
+      <div class="rank-stars">🎖️ <span id="top1-estrelas">0</span> Insígnias</div>
+    </div>
+    
+    <!-- TOP 3 -->
+    <div class="podium-card bronze">
+      <div class="title-badge">🥉 Top 4</div>
+      <div class="rank-name" id="top3-nome">---</div>
+      <div class="rank-team" id="top3-deck">---</div>
+      <div class="rank-stars">🏅 <span id="top3-estrelas">0</span> Insígnias</div>
+    </div>
+  </div>
+
+  <!-- RANKING GERAL ESTILO LISTA -->
+  <div class="ranking-title">Tabela de Classificação</div>
+  <div class="ranking-container">
+    <div class="ranking-header">
+      <span>TREINADOR</span>
+      <span id="label-extra">STATUS</span>
+      <span>INSÍGNIAS 🏅</span>
+    </div>
+    <div id="lista-ranking-geral" class="ranking-scroll">
+      <!-- Os dados vão entrar aqui via JS -->
+    </div>
+  </div>
+
+  <!-- WIDGETS DE ESTATÍSTICAS TOTAIS -->
+  <div class="stats-grid">
+    <div class="stat-item">
+      <small style="color: #88c0d0; display: block; font-size: 0.65rem; text-transform: uppercase;">Partidas Computadas</small>
+      <strong id="total-duelos" style="font-size: 1.2rem; color: #fff;">0</strong>
+    </div>
+    <div class="stat-item">
+      <small style="color: #88c0d0; display: block; font-size: 0.65rem; text-transform: uppercase;">Insígnias Globais</small>
+      <strong id="total-estrelas" style="font-size: 1.2rem; color: var(--amarelo-campeao);">0</strong>
+    </div>
+    <div class="stat-item shark" style="border-color: var(--vermelho-liga);">
+      <small style="color: var(--vermelho-liga); display: block; font-size: 0.65rem; text-transform: uppercase;">🔥 MESTRE DAS INSÍGNIAS</small>
+      <strong id="shark-player" style="font-size: 1.2rem; color: #fff;">Ninguém</strong>
+    </div>
+  </div>
+
+  <!-- ÁREA DE COMUNICADOS E REGRAS -->
+  <div class="info-section">
+    <div class="tab-buttons" style="display: flex; background: var(--azul-arena);">
+      <button onclick="verInfo('notificacoes')" class="active" style="flex: 1; margin: 0; border-radius: 0; background: transparent; padding: 10px; font-size: 0.8rem;">Feed da Liga</button>
+      <button onclick="verInfo('regras')" style="flex: 1; margin: 0; border-radius: 0; background: transparent; padding: 10px; font-size: 0.8rem;">Regras VGC</button>
+    </div>
+    <div id="display-info" class="scroll-area">
+      <p id="msg-juiz">Aguardando diretrizes da organização do torneio...</p>
+    </div>
+  </div>
+
+  <button onclick="abrirModulo('registrar-duelo')" class="btn-battle">⚔️ ENTRAR NA FILA DE BATALHA (Bo3)</button>
+  <button onclick="logout()" style="color:#64748b; background:none; border:none; margin-top:15px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;">Desconectar Treinador</button>
+</div>
+
+<!-- Fundo escuro fixo (Ocupa a tela toda) -->
+<div id="arena-modal" class="hidden" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(2,8,19,0.95); z-index:10000; align-items:center; justify-content:center;">
+  <!-- Caixa de conteúdo única (Tema Arena Pokémon) -->
+  <div style="background: linear-gradient(145deg, #060e18, #0d1b2a); border: 3px solid var(--azul-neon); width: 90%; max-width: 400px; padding: 20px; border-radius: 15px; box-shadow: 0 0 30px rgba(0,191,255,0.4); position: relative; text-align: center;">
+    
+    <!-- 1. Cabeçalho Interno -->
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px; border-bottom: 1px solid rgba(0,191,255,0.3); padding-bottom: 10px;">
+      <div style="width: 30px;"></div>
+      <h2 style="color:var(--azul-neon); margin: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; flex-grow: 1; text-align: center; text-shadow: 0 0 10px rgba(0,191,255,0.4);">
+        🏟️ Arena de Combate VGC
+      </h2>
+      <button onclick="fecharArena()" style="width: 30px; background: none; border: none; color: var(--azul-neon); font-size: 1.5rem; font-weight: bold; cursor: pointer; line-height: 1;">
+        ✕
+      </button>
+    </div>
+
+    <!-- 2. Seleção de Modo/Salas -->
+    <div id="selecao-modo">
+      <p style="color: #aebac7; font-size: 0.8rem; margin-bottom: 15px;">Escolha o tier de recompensa do Set (Melhor de 3):</p>
+      <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+        <button onclick="abrirLobby('Normal', 0)" style="padding: 12px; background: #132237; color: white; border: 1px solid var(--azul-arena); border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">⚔️ TREINO LIVRE</button>
+        <button onclick="abrirLobby('Aposta', 1)" style="padding: 12px; background: rgba(0,191,255,0.05); color: var(--azul-neon); border: 1px solid var(--azul-neon); border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">🏅 VALENDO 1 INSÍGNIA</button>
+        <button onclick="abrirLobby('Aposta', 3)" style="padding: 12px; background: rgba(0,191,255,0.05); color: var(--azul-neon); border: 1px solid var(--azul-neon); border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">🏅 VALENDO 3 INSÍGNIAS</button>
+        <button onclick="abrirLobby('Aposta', 5)" style="padding: 12px; background: rgba(0,191,255,0.05); color: var(--azul-neon); border: 1px solid var(--azul-neon); border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">🏅 VALENDO 5 INSÍGNIAS</button>
+        <button onclick="abrirLobby('Aposta', 10)" style="padding: 12px; background: rgba(0,191,255,0.05); color: var(--azul-neon); border: 1px solid var(--azul-neon); border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">🏅 VALENDO 10 INSÍGNIAS</button>
+      </div>
+    </div>
+
+    <!-- 3. Lobby de Espera (Busca de Oponentes) -->
+    <div id="lobby-espera" class="hidden">
+      <h3 id="titulo-sala" style="color: var(--azul-neon); font-size: 1rem; margin-bottom: 10px; text-transform: uppercase;">📡 Buscando Pareamento Link...</h3>
+      <div id="lista-disponiveis" style="min-height: 100px; max-height: 200px; overflow-y: auto; background: rgba(2,8,19,0.5); border: 1px solid rgba(0,191,255,0.1); border-radius: 5px; margin-bottom: 15px;">
+        <!-- Oponentes aparecem aqui via JS -->
+      </div>
+      <button onclick="sairDaFila()" style="padding: 10px; width: 100%; background: #20334a; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.75rem;">CANCELAR PAREAMENTO</button>
+    </div>
+
+    <!-- 4. Painel de Resultado -->
+    <div id="painel-resultado" class="hidden">
+      <p style="color: #aebac7; margin-bottom: 10px; font-size: 0.9rem;">Desafio VGC contra: <br><strong id="oponente-nome" style="color:var(--amarelo-campeao); font-size: 1.2rem;">---</strong></p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+        <button onclick="enviarResultado('Vitoria')" style="padding: 15px; background: #00cc88; color: white; border: none; border-radius: 5px; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; box-shadow: 0 4px 0 #009966;">VICTOR (2x0 / 2x1)</button>
+        <button onclick="enviarResultado('Derrota')" style="padding: 15px; background: var(--vermelho-liga); color: white; border: none; border-radius: 5px; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; box-shadow: 0 4px 0 #cc0000;">DEFEAT (0x2 / 1x2)</button>
+        <button onclick="enviarResultado('Empate')" style="grid-column: span 2; padding: 12px; background: #4b5d6c; color: white; border: none; border-radius: 5px; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">EMPATE NO SET</button>
+      </div>
+      <p id="msg-aguardo" style="font-size: 0.7rem; color: #64748b; margin-top: 15px;">Reporte o placar final. O sistema aguarda a validação de ambos os lados.</p>
+    </div>
+  </div>
+</div>
+
+<div id="custom-notification" class="hidden">
+  <div class="notif-content">
+    <span id="notif-icon">🎮</span>
+    <span id="notif-text">Alerta do Match System...</span>
+  </div>
+</div>
+
+<!-- Fundo escuro do convite -->
+<div id="modal-convite" class="hidden" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(2,8,19,0.95); z-index:11000; align-items:center; justify-content:center;">
+  <!-- Caixa de convite centralizada -->
+// CONFIGURAÇÃO INICIAL // --- CONFIGURAÇÃO ---
+const URL_API = "https://script.google.com/macros/s/AKfycbwwW6qsh9UWYKdHLfmPk8udXY36HsUEgvO0eYGqyW4RLKDX08soy_JwdQCKHbafNxCo/exec"; // Cole aqui o link da NOVA IMPLANTAÇÃO do Google
+let loopArena = null;
+let dueloAtivoID = null;
+let oponenteAtual = null;
+
+// 1. INICIALIZAÇÃO (Memory Card)
+window.onload = () => {
+  const userLogado = localStorage.getItem('duelista');
+  if (userLogado) {
+    mostrarArena(JSON.parse(userLogado));
+  }
+};
+
+// 2. FUNÇÃO DE LOGIN / REGISTRO
+async function entrarNaArena() {
+  const nome = document.getElementById('nome').value.trim();
+  const senha = document.getElementById('senha').value;
+  const deck = document.getElementById('deck') ? document.getElementById('deck').value : "";
+  const status = document.getElementById('status');
+
+  if (!nome || !senha) {
+    alert("Informe Nome de Treinador e Senha!");
+    return;
+  }
+
+  if (status) status.innerText = "Conectando ao Match System da Liga...";
+
+  try {
+    const resp = await fetch(URL_API, { method: 'GET', redirect: 'follow' });
+    const jogadores = await resp.json();
+    const duelista = jogadores.find(j => j.nome.toLowerCase() === nome.toLowerCase());
+
+    if (duelista) {
+      if (duelista.senha == senha) {
+        localStorage.setItem('duelista', JSON.stringify(duelista));
+        mostrarArena(duelista);
+      } else {
+        status.innerText = "Senha de acesso incorreta!";
+      }
+    } else {
+      const registroExtra = document.getElementById('registro-extra');
+      if (registroExtra && registroExtra.classList.contains('hidden')) {
+        registroExtra.classList.remove('hidden');
+        status.innerText = "Novo Treinador detectado! Registre seu Time (6 Pokémon) e entre novamente.";
+      } else {
+        status.innerText = "Registrando na Liga...";
+        await fetch(URL_API, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: JSON.stringify({ action: "registrar", nome, deck, senha })
+        });
+        const dadosFinais = { nome, deck, vitorias: 0, derrotas: 0, pontos: 0 };
+        localStorage.setItem('duelista', JSON.stringify(dadosFinais));
+        mostrarArena(dadosFinais);
+      }
+    }
+  } catch (e) {
+    status.innerText = "Erro de conexão. Verifique os servidores ou o link do Google.";
+  }
+}
+
+// 3. MOSTRAR DASHBOARD E CARREGAR RANKING
+function mostrarArena(dados) {
+  document.getElementById('auth-screen').classList.add('hidden');
+  document.getElementById('arena-modal').classList.add('hidden');
+  document.getElementById('main-screen').classList.remove('hidden');
+  
+  const userDisplay = document.getElementById('user-name');
+  if (userDisplay) userDisplay.innerText = dados.nome;
+  
+  carregarRanking();
+  if (typeof verificarAdmin === "function") verificarAdmin(dados.nome);
+}
+
+async function carregarRanking() {
+  const listaGeral = document.getElementById('lista-ranking-geral');
+  if (!listaGeral) return;
+
+  try {
+    const resp = await fetch(URL_API, { method: 'GET', redirect: 'follow' });
+    const jogadores = await resp.json();
+
+    // --- 1. LÓGICA DE NOTIFICAÇÃO DO ORGANIZADOR ---
+    if (jogadores.length > 0 && jogadores[0].avisoGlobal) {
+      const novaMsg = jogadores[0].avisoGlobal.trim();
+      window.ultimaMensagemJuiz = novaMsg;
+      if (novaMsg !== "" && novaMsg !== localStorage.getItem('ultimo_aviso_visto')) {
+        if (typeof avisarReino === "function") {
+          avisarReino(novaMsg, "📢");
+          localStorage.setItem('ultimo_aviso_visto', novaMsg);
+        }
+      }
+    }
+
+    // --- 2. CÁLCULO DOS CARDS DO DASHBOARD ---
+    const estrelasTotais = jogadores.reduce((acc, j) => acc + (parseInt(j.pontos) || 0), 0);
+    if (document.getElementById('total-stars') || document.getElementById('total-estrelas')) {
+      const targetId = document.getElementById('total-estrelas') ? 'total-estrelas' : 'total-stars';
+      document.getElementById(targetId).innerText = estrelasTotais;
+    }
+
+    const somaPartidas = jogadores.reduce((acc, j) => {
+      return acc + (parseInt(j.vitorias) || 0) + (parseInt(j.derrotas) || 0) + (parseInt(j.empates) || 0);
+    }, 0);
+    const duelosTotais = Math.floor(somaPartidas / 2);
+    if (document.getElementById('total-duelos')) {
+      document.getElementById('total-duelos').innerText = duelosTotais;
+    }
+
+    const listaParaShark = [...jogadores].sort((a, b) => (parseInt(b.lucroAposta) || 0) - (parseInt(a.lucroAposta) || 0));
+    const cardShark = document.getElementById('shark-player');
+    if (cardShark) {
+      if (listaParaShark.length > 0 && (parseInt(listaParaShark[0].lucroAposta) || 0) > 0) {
+        cardShark.innerText = `${listaParaShark[0].nome} (+${listaParaShark[0].lucroAposta} 🏅)`;
+        cardShark.style.color = "var(--amarelo-campeao)";
+      } else {
+        cardShark.innerText = "Ninguém";
+        cardShark.style.color = "#64748b";
+      }
+    }
+
+    // --- 3. ORDENAÇÃO E PREENCHIMENTO DO RANKING GERAL ---
+    jogadores.sort((a, b) => (parseInt(b.pontos) || 0) - (parseInt(a.pontos) || 0));
+
+    const preencherTop = (index, id) => {
+      const j = jogadores[index];
+      if (j) {
+        if (document.getElementById(`${id}-nome`)) document.getElementById(`${id}-nome`).innerText = j.nome || "---";
+        if (document.getElementById(`${id}-deck`)) document.getElementById(`${id}-deck`).innerText = j.baralho || j.deck || "---";
+        if (document.getElementById(`${id}-estrelas`)) document.getElementById(`${id}-estrelas`).innerText = j.pontos || "0";
+      }
+    };
+    preencherTop(0, 'top1');
+    preencherTop(1, 'top2');
+    preencherTop(2, 'top3');
+
+    listaGeral.innerHTML = "";
+    jogadores.forEach((j, i) => {
+      const v = parseInt(j.vitorias) || 0;
+      const d = parseInt(j.derrotas) || 0;
+      const e = parseInt(j.empates) || 0;
+      const pts = parseInt(j.pontos) || 0;
+      const streak = parseInt(j.streak) || 0;
+      const totalDuelos = v + d + e;
+      const wr = totalDuelos > 0 ? ((v / totalDuelos) * 100).toFixed(0) : 0;
+      const fogo = streak >= 3 ? `<span style="color:var(--amarelo-campeao)"> 🔥${streak}</span>` : "";
+      const userDeck = j.baralho || j.deck || "Não Informado";
+
+      listaGeral.innerHTML += `
+        <div class="ranking-row-item">
+          <div style="display: flex; justify-content: space-between; width: 100%;">
+            <span><b style="color:var(--azul-neon)">${i + 1}º</b> ${j.nome}${fogo}</span>
+            <span style="color:var(--amarelo-campeao); font-weight:bold;">🏅 ${pts}</span>
+          </div>
+          <!-- LINHA DE ESTATÍSTICAS DO TREINADOR -->
+          <div style="display: flex; margin-top: 6px; flex-wrap: wrap; gap: 4px; align-items: center;">
+            <span class="stat-tag" style="border: 1px solid var(--azul-arena);">Sets: ${totalDuelos}</span>
+            <span class="stat-tag" style="background: rgba(0, 204, 136, 0.15); color: #00cc88;">V:${v}</span>
+            <span class="stat-tag" style="background: rgba(75, 93, 108, 0.15); color: #aebac7;">E:${e}</span>
+            <span class="stat-tag" style="background: rgba(255, 31, 31, 0.15); color: var(--vermelho-liga);">D:${d}</span>
+            <span class="stat-tag" style="margin-left: auto; color:#88c0d0;">${wr}% WR</span>
+          </div>
+          <div style="font-size: 0.65rem; color: #64748b; margin-top: 4px; text-transform: uppercase; letter-spacing:0.5px;">Time: ${userDeck}</div>
+        </div>`;
+    });
+
+    if (typeof carregarConflitos === "function") carregarConflitos();
+  } catch (error) {
+    console.error("Erro ao processar a tabela de classificação:", error);
+  }
+}
+
+// 4. LÓGICA DA ARENA
+function abrirModulo(tipo) {
+  if (tipo === 'registrar-duelo') {
+    const modal = document.getElementById('arena-modal');
+    const selecao = document.getElementById('selecao-modo');
+
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
+
+    if (selecao) {
+      selecao.classList.remove('hidden');
+      selecao.style.display = 'block';
+    }
+    
+    if (document.getElementById('lobby-espera')) document.getElementById('lobby-espera').classList.add('hidden');
+    if (document.getElementById('painel-resultado')) document.getElementById('painel-resultado').classList.add('hidden');
+  }
+}
+
+// --- FUNÇÃO ABRIR LOBBY COM TRAVA DE SALDO ---
+async function abrirLobby(modo, valor) {
+  const userStr = localStorage.getItem('duelista');
+  if (!userStr) return;
+  const userLocal = JSON.parse(userStr);
+
+  try {
+    const respRanking = await fetch(URL_API, { redirect: 'follow' });
+    const jogadores = await respRanking.json();
+    const duelistaAtivo = jogadores.find(j => j.nome === userLocal.nome);
+    const saldoAtual = duelistaAtivo ? parseInt(duelistaAtivo.pontos) : 0;
+
+    // Trava de saldo adaptada para insígnias
+    if (modo === 'Aposta' && saldoAtual < valor) {
+      if (typeof avisarReino === "function") {
+        avisarReino(`Bolsa de Insígnias insuficiente! Você possui 🏅${saldoAtual} e o tier exige 🏅${valor}.`, "🚫");
+      } else {
+        alert(`Bolsa de Insígnias insuficiente! Você possui 🏅${saldoAtual} e o tier exige 🏅${valor}.`);
+      }
+      return;
+    }
+
+    document.getElementById('selecao-modo').classList.add('hidden');
+    document.getElementById('lobby-espera').classList.remove('hidden');
+    document.getElementById('titulo-sala').innerText = `Formato: ${modo === 'Normal' ? 'Treino Livre' : 'Valendo ' + valor + ' 🏅'}`;
+
+    await fetch(URL_API, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({ action: "entrarNaFila", nome: userLocal.nome, modo, valor })
+    });
+
+    if (loopArena) clearInterval(loopArena);
+    loopArena = setInterval(() => atualizarListaFila(modo, valor), 4000);
+  } catch (e) {
+    console.error("Erro ao estabelecer conexão Link com o Lobby:", e);
+  }
+}
+// O segredo está nesta primeira linha: ASYNC FUNCTION
+async function atualizarListaFila(modo, valor) {
+  const listaDiv = document.getElementById('lista-disponiveis');
+  const userStr = localStorage.getItem('duelista');
+  if (!userStr || !listaDiv) return;
+  const user = JSON.parse(userStr);
+
+  try {
+    // 1. CHECAGEM DE STATUS (Convites, Aceites e Recusas) - Adaptado para Partidas
+    const respCheck = await fetch(`${URL_API}?action=statusPartida&nome=${user.nome}`, { redirect: 'follow' });
+    const statusD = await respCheck.json();
+    
+    // Log para depuração: Caso precise ver o que o Google respondeu, aperte F12
+    console.log("Status Recebido da Liga:", statusD);
+
+    if (statusD && statusD.emAndamento) {
+      // CASO: VOCÊ É O DESAFIADO (Aparece o Modal de Convite para o Set Bo3)
+      if (statusD.subStatus === "PENDENTE" && statusD.souDesafiado) {
+        const modal = document.getElementById('modal-convite');
+        if (modal && (modal.classList.contains('hidden') || modal.style.display === 'none')) {
+          mostrarConviteEstiloso(statusD.oponente, statusD.modo, statusD.idPartida);
+        }
+        return;
+      }
+      // CASO: SEU DESAFIO FOI ACEITO (Abre a Arena de Combate)
+      else if (statusD.subStatus === "ACEITO") {
+        dueloAtivoID = statusD.idPartida;
+        abrirPainelResultado(statusD.oponente);
+        return;
+      }
+    }
+    // CASO: DESAFIO RECUSADO (Aviso e Reset)
+    else if (statusD && statusD.recusado) {
+      if (typeof avisarReino === "function") {
+        avisarReino(`O confronto VGC contra ${statusD.oponente} foi recusado ou cancelado.`, "❌");
+      }
+      if (loopArena) {
+        clearInterval(loopArena);
+        loopArena = null;
+      }
+      document.getElementById('lobby-espera').classList.add('hidden');
+      document.getElementById('painel-resultado').classList.add('hidden');
+      document.getElementById('selecao-modo').classList.remove('hidden');
+      
+      const modal = document.getElementById('modal-convite');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+      return;
+    }
+
+    // 2. BUSCA DE OPONENTES NA FILA (Exibe quem está na mesma sala/tier)
+    const respFila = await fetch(`${URL_API}?action=lerFila`, { redirect: 'follow' });
+    const fila = await respFila.json();
+    const oponentes = fila.filter(f => f.modo === modo && f.valor == valor && f.nome !== user.nome);
+    
+    listaDiv.innerHTML = oponentes.length === 0 ? "<p style='padding:10px; font-size:0.7rem; color:#64748b;'>Aguardando pareamento de outros Treinadores...</p>" : "";
+    
+    oponentes.forEach(op => {
+      listaDiv.innerHTML += `
+        <div class="ranking-row-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid rgba(0,191,255,0.1); background: rgba(13,27,42,0.3); margin-bottom: 4px;">
+          <span style="color:white; font-weight:bold;">${op.nome}</span>
+          <button onclick="desafiar('${op.nome}','${modo}',${valor})" style="background:var(--azul-neon); color:white; border:none; padding:6px 12px; font-weight:bold; cursor:pointer; border-radius:3px; text-transform:uppercase; font-size:0.7rem; text-shadow:1px 1px 1px black;"> DESAFIAR </button>
+        </div>`;
+    });
+
+  } catch (e) {
+    console.warn("Sincronizando Link Arena...");
+  }
+}
+
+async function desafiar(nomeOp, modo, valor) {
+  const user = JSON.parse(localStorage.getItem('duelista'));
+  
+  // Criamos um ID fixo baseado na ordem alfabética dos nomes
+  const nomesOrdenados = [user.nome, nomeOp].sort();
+  const idPartidaFixa = "P-" + nomesOrdenados[0] + "-" + nomesOrdenados[1];
+  dueloAtivoID = idPartidaFixa;
+
+  const listaDiv = document.getElementById('lista-disponiveis');
+  if (listaDiv) {
+    listaDiv.innerHTML = `<p style="color:var(--azul-neon); padding:20px; font-weight:bold; text-transform:uppercase; font-size:0.8rem;">Enviando solicitação Link...<br><span style="color:#64748b; text-transform:none; font-weight:normal; font-size:0.7rem;">Aguarde o oponente aceitar o Set Bo3.</span></p>`;
+  }
+
+  try {
+    await fetch(URL_API, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({
+        action: "iniciarPartida",
+        idPartida: idPartidaFixa,
+        jogador1: user.nome,
+        jogador2: nomeOp,
+        tipo: modo,
+        valor: valor
+      })
+    });
+    // O desafiante fica no loop automático até o status mudar para 'ACEITO'
+  } catch (e) {
+    console.error("Falha catastrófica ao enviar convite de partida.");
+  }
+}
+
+function abrirPainelResultado(oponente) {
+  // 1. Para o cronômetro de busca imediatamente
+  if (loopArena) {
+    clearInterval(loopArena);
+    loopArena = null;
+  }
+  
+  // 2. Localiza os elementos visuais
+  const lobby = document.getElementById('lobby-espera');
+  const painel = document.getElementById('painel-resultado');
+  const nomeTxt = document.getElementById('oponente-nome');
+  
+  // 3. Troca as telas dentro da Arena Pokémon
+  if (lobby) {
+    lobby.classList.add('hidden');
+    lobby.style.display = 'none';
+  }
+  if (painel) {
+    painel.classList.remove('hidden');
+    painel.style.display = 'block';
+  }
+  if (nomeTxt) {
+    nomeTxt.innerText = oponente;
+  }
+  console.log("Conexão Link estabelecida! Partida iniciada contra: " + oponente);
+}
+
+async function enviarResultado(res) {
+  const user = JSON.parse(localStorage.getItem('duelista'));
+  try {
+    await fetch(URL_API, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({
+        action: "confirmarPartida",
+        idPartida: dueloAtivoID,
+        jogador: user.nome,
+        resultado: res
+      })
+    });
+    alert("Placar do Set enviado com sucesso! Aguardando validação para atualizar a tabela.");
+    location.reload();
+  } catch (e) {
+    alert("Erro ao enviar resultado. Verifique sua conexão de rede.");
+  }
+}
+
+function fecharArena() {
+  const modal = document.getElementById('arena-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+  }
+  if (loopArena) {
+    clearInterval(loopArena);
+    loopArena = null;
+  }
+  // Remove o treinador da fila para limpar o nome na planilha
+  sairDaFila();
+}
+
+async function sairDaFila() {
+  // 1. Limpa o visual das salas
+  const lobby = document.getElementById('lobby-espera');
+  const selecao = document.getElementById('selecao-modo');
+  if (lobby) lobby.classList.add('hidden');
+  if (selecao) selecao.classList.remove('hidden');
+  
+  // 2. Remove o registro de busca na planilha do Google
+  const userStr = localStorage.getItem('duelista');
+  if (!userStr) return;
+  const user = JSON.parse(userStr);
+  
+  try {
+    await fetch(URL_API, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({ action: "removerDaFila", nome: user.nome })
+    });
+  } catch (e) {
+    console.warn("Desconexão silenciosa da fila.");
+  }
+}
+// CERTIFIQUE-SE DE QUE NÃO HÁ CHAVES } SOBRANDO ABAIXO DESTA LINHA
+function avisarReino(msg, icone = "🎮") {
+  const notif = document.getElementById('custom-notification');
+  document.getElementById('notif-text').innerText = msg;
+  document.getElementById('notif-icon').innerText = icone;
+  notif.classList.remove('hidden');
+  
+  // Some após 4 segundos
+  setTimeout(() => {
+    notif.classList.add('hidden');
+  }, 4000);
+}
+
+function mostrarConviteEstiloso(oponente, modo, idPartida) {
+  const modal = document.getElementById('modal-convite');
+  const texto = document.getElementById('texto-convite');
+  const btnAceitar = document.getElementById('btn-aceitar');
+  const btnRecusar = document.getElementById('btn-recusar');
+
+  // 1. Preenche o texto com o nome do oponente (Adaptado para VGC)
+  texto.innerHTML = `O Treinador <b style="color:var(--azul-neon)">${oponente}</b> te desafiou para um Set <b>${modo === 'Normal' ? 'Treino Livre' : 'Valendo Recompensa'}</b>! Aceita ligar os consoles?`;
+
+  // 2. Exibe o modal centralizado
+  modal.classList.remove('hidden');
+  modal.style.display = 'flex';
+
+  // 3. Ação ao ACEITAR
+  btnAceitar.onclick = async () => {
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+
+    // Avisa o Google que você aceitou (Sincronizado com o Apps Script)
+    await fetch(URL_API, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({ action: "aceitarPartida", idPartida: idPartida })
+    });
+
+    dueloAtivoID = idPartida; // Grava o ID da partida atual
+    abrirPainelResultado(oponente); // Manda VOCÊ para a tela de Reportar Placar
+  };
+
+  // 4. Ação ao RECUSAR
+  btnRecusar.onclick = async () => {
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+    
+    await fetch(URL_API, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({ action: "recusarPartida", idPartida: idPartida })
+    });
+  };
+}
+
+// 1. LÓGICA DE TROCA DE ABAS (Feed da Liga vs Regras Oficiais VGC)
+function verInfo(aba) {
+  const display = document.getElementById('display-info');
+  if (!display) return;
+
+  if (aba === 'notificacoes') {
+    const msg = window.ultimaMensagemJuiz || "Nenhuma nova diretriz emitida pela Liga.";
+    display.innerHTML = `
+      <div style="padding:10px; border-left: 3px solid var(--azul-neon); background: rgba(0, 191, 255, 0.05);">
+        <p style="color:var(--azul-neon); font-size:0.85rem; font-weight:bold; margin-bottom:5px;">📢 COMUNICADO DA ORGANIZAÇÃO:</p>
+        <p style="color:#e5e9f0; font-size:0.8rem; line-height:1.4;">${msg}</p>
+      </div>`;
+  } else if (aba === 'regras') {
+    display.innerHTML = `
+      <ul style="color: #aebac7; font-size: 0.75rem; text-align: left; padding-left: 20px; line-height: 1.5;">
+        <li>Formato Oficial: <b style="color:var(--azul-neon)">Batalhas em Dupla (VGC)</b>.</li>
+        <li>Sets Livres: Ganho padrão de <b style="color:var(--amarelo-campeao)">🏅 Insígnias</b> conforme pontuação base.</li>
+        <li>Tiers de Aposta: O vencedor do Set (Bo3) arremata todas as insígnias da mesa.</li>
+        <li>Em caso de conflito de relatórios, o Organizador dará o veredito final por log.</li>
+        <li>Desconexões não justificadas durante o Match contam como <b style="color:var(--vermelho-liga)">Derrota Automática (0x2)</b>.</li>
+        <li>Respeite a Cláusula de Espécies e Itens permitidos na Season atual do jogo.</li>
+      </ul>`;
+  }
+}
+
+// 2. LÓGICA PARA EXIBIR O PAINEL DO ORGANIZADOR
+function verificarAdmin(nome) {
+  const ADMIN_NOME = "Sainths"; // SUBSTITUA PELO SEU NOME EXATO NA PLANILHA
+  const painel = document.getElementById('painel-admin');
+  if (nome === ADMIN_NOME && painel) {
+    painel.classList.remove('hidden');
+  }
+}
+
+// 3. COMANDOS ADMINISTRATIVOS DO ORGANIZADOR
+async function resetarTorneio() {
+  if (confirm("⚠️ ATENÇÃO: Isso apagará TODOS os pontos, insígnias e o histórico de partidas. Deseja iniciar uma nova temporada?")) {
+    const senha = prompt("Digite a senha master do sistema:");
+    if (senha === "123") { // Mude sua senha administrativa aqui se quiser
+      await fetch(URL_API, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({ action: "resetTotal" })
+      });
+      alert("A Liga Pokémon foi resetada com sucesso! Reiniciando banco...");
+      location.reload();
+    }
+  }
+}
+
+async function limparFilaGeral() {
+  await fetch(URL_API, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({ action: "limparFilaGeral" })
+  });
+  alert("Fila de pareamentos limpa!");
+}
+
+async function enviarAvisoGlobal() {
+  const texto = document.getElementById('input-global-notif').value;
+  if (!texto) return;
+  await fetch(URL_API, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({ action: "postarAviso", mensagem: texto })
+  });
+  alert("Feed da Liga atualizado com sucesso!");
+  document.getElementById('input-global-notif').value = "";
+}
+
+// 4. CENTRAL DE RESOLUÇÃO DE CONFLITOS DE PLACAR
+async function carregarConflitos() {
+  const container = document.getElementById('container-conflitos');
+  if (!container || document.getElementById('painel-admin').classList.contains('hidden')) return;
+
+  try {
+    const resp = await fetch(`${URL_API}?action=lerConflitos`, { redirect: 'follow' });
+    const conflitos = await resp.json();
+
+    if (conflitos.length === 0) {
+      container.innerHTML = `<p style="color:#64748b; padding: 10px;">Nenhum conflito na mesa de arbitragem.</p>`;
+      return;
+    }
+
+    container.innerHTML = "";
+    conflitos.forEach(c => {
+      container.innerHTML += `
+        <div style="background: rgba(13,27,42,0.6); border: 1px solid var(--azul-neon); padding: 10px; margin-bottom: 10px; border-radius: 8px;">
+          <p style="color:white; margin-bottom: 8px; font-size:0.8rem;">
+            <b style="color:var(--azul-neon)">${c.j1}</b> vs <b style="color:var(--azul-neon)">${c.j2}</b><br>
+            Tier do Set: <span style="color:var(--amarelo-campeao)">${c.valor == 0 ? "Treino Livre" : c.valor + " 🏅"}</span>
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+            <button onclick="resolverConflito('${c.id}', '${c.j1}')" style="background:#00cc88; color:white; border:none; padding:6px; border-radius:3px; cursor:pointer; font-size:0.6rem; font-weight:bold;">VITÓRIA ${c.j1}</button>
+            <button onclick="resolverConflito('${c.id}', '${c.j2}')" style="background:#00cc88; color:white; border:none; padding:6px; border-radius:3px; cursor:pointer; font-size:0.6rem; font-weight:bold;">VITÓRIA ${c.j2}</button>
+            <button onclick="resolverConflito('${c.id}', 'CANCELAR')" style="grid-column: span 2; background:#20334a; color:#aebac7; border:none; padding:6px; border-radius:3px; cursor:pointer; font-size:0.6rem; margin-top:2px;">ANULAR MATCH (Ninguém ganha/perde)</button>
+          </div>
+        </div>`;
+    });
+  } catch (e) {
+    console.warn("Erro ao varrer banco em busca de conflitos.");
+  }
+}
+
+async function resolverConflito(id, vencedor) {
+  if (confirm(vencedor === "CANCELAR" ? "Deseja anular este Match por completo?" : `Confirmar vitória oficial de ${vencedor}?`)) {
+    try {
+      await fetch(URL_API, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({ action: "resolverConflito", idPartida: id, vencedor: vencedor })
+      });
+      
+      avisarReino("Arbitragem concluída! Tabela atualizada.", "⚖️");
+      
+      const container = document.getElementById('container-conflitos');
+      container.innerHTML = `<p style="color:var(--azul-neon)">Atualizando banco de dados...</p>`;
+      
+      setTimeout(async () => {
+        await carregarRanking();
+        if (typeof carregarConflitos === "function") await carregarConflitos();
+      }, 4000);
+    } catch (e) {
+      console.error("Erro ao aplicar resolução na mesa do juiz.");
+    }
+  }
+}
+
+function logout() {
+  localStorage.removeItem('duelista');
+  location.reload();
+}
+
+// Sincronização de Background (A cada 30 segundos puxa os dados se a arena estiver fechada)
+setInterval(() => {
+  const modalArena = document.getElementById('arena-modal');
+  if (modalArena) {
+    const arenaAberta = !modalArena.classList.contains('hidden') && modalArena.style.display !== 'none';
+    if (!arenaAberta) {
+      carregarRanking();
+    }
+  }
+}, 30000);
+</script>
+</body>
+</html>
