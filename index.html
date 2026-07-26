@@ -253,207 +253,37 @@
     }
   </style>
 </head>
-  .rank-team-sub { display: block; font-size: 0.65rem; color: #88c0d0; }
   
-  .container { 
-    width: 90%; 
-    max-width: 400px; 
-    margin-top: 50px; 
-    padding: 20px; 
-    border: 2px solid var(--azul-neon); 
-    border-radius: 15px; 
-    background: rgba(6, 14, 24, 0.95); 
-    box-shadow: 0 0 20px rgba(0, 191, 255, 0.4); 
-    text-align: center; 
-  }
-
-  h1 { 
-    color: var(--azul-neon); 
-    text-transform: uppercase; 
-    letter-spacing: 2px; 
-    text-shadow: 2px 2px #000, 0 0 10px rgba(0, 191, 255, 0.6); 
-    font-size: 1.5rem; 
-  }
-
-  .input-group { margin: 15px 0; text-align: left; }
-  
-  label { 
-    display: block; 
-    color: #e5e9f0; 
-    margin-bottom: 5px; 
-    font-weight: bold; 
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  input { 
-    width: 100%; 
-    padding: 10px; 
-    background: #132237; 
-    border: 1px solid var(--azul-arena); 
-    color: white; 
-    border-radius: 5px; 
-    box-sizing: border-box; 
-    transition: 0.3s;
-  }
-
-  input:focus {
-    border-color: var(--azul-neon);
-    box-shadow: 0 0 8px rgba(0, 191, 255, 0.5);
-    outline: none;
-  }
-
-  button { 
-    width: 100%; 
-    padding: 12px; 
-    background: linear-gradient(to bottom, var(--azul-neon), #05668d); 
-    border: none; 
-    color: white; 
-    font-weight: bold; 
-    text-transform: uppercase; 
-    cursor: pointer; 
-    border-radius: 5px; 
-    margin-top: 10px; 
-    transition: 0.3s; 
-    text-shadow: 1px 1px 2px black;
-  }
-
-  button:hover { 
-    background: linear-gradient(to bottom, #00d2ff, var(--azul-neon)); 
-    transform: scale(1.02); 
-  }
-
-  /* Garante o visual das tags de status no Ranking */
-  .stat-tag { 
-    font-size: 0.65rem; 
-    background: rgba(0, 191, 255, 0.1); 
-    padding: 2px 6px; 
-    border-radius: 4px; 
-    border: 1px solid rgba(0, 191, 255, 0.3); 
-    color: #e5e9f0; 
-    margin-right: 4px; 
-  }
-
-  #custom-notification { 
-    position: fixed; 
-    top: 20px; 
-    left: 50%; 
-    transform: translateX(-50%); 
-    background: linear-gradient(145deg, #0d1b2a, #060e18); 
-    border: 2px solid var(--vermelho-liga); 
-    border-radius: 8px; 
-    padding: 15px 25px; 
-    z-index: 9999; 
-    box-shadow: 0 0 15px rgba(255, 31, 31, 0.4); 
-    transition: all 0.5s ease; 
-  }
-
-  .notif-content { 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    color: white; 
-    font-weight: bold; 
-    text-shadow: 1px 1px 2px black; 
-  }
-
-  #notif-icon { font-size: 1.2rem; }
-
-  .ranking-row-item { 
-    display: flex; 
-    flex-direction: column; 
-    padding: 12px; 
-    border-bottom: 1px solid rgba(0, 191, 255, 0.1); 
-    background: rgba(13, 27, 42, 0.4); 
-    margin-bottom: 5px; 
-    border-radius: 5px; 
-  }
-
-  .rank-stats-row { 
-    display: flex; 
-    gap: 8px; 
-    font-size: 0.65rem; 
-    color: #aebac7; 
-    margin-top: 4px; 
-    text-transform: uppercase; 
-  }
-
-  .win-streak { 
-    color: var(--amarelo-campeao); 
-    font-weight: bold; 
-    text-shadow: 0 0 5px rgba(255, 222, 0, 0.6); 
-    animation: pulse 1.5s infinite; 
-  }
-
-  @keyframes pulse { 
-    0% { opacity: 0.8; } 
-    50% { opacity: 1; text-shadow: 0 0 10px var(--amarelo-campeao); } 
-    100% { opacity: 0.8; } 
-  }
-
-  .winrate-high { color: #00ffcc; }
-  .duelos-warning { color: #ff9f43; }
-
-  .btn-lobby { 
-    background: var(--azul-arena); 
-    color: white; 
-    border: 1px solid var(--azul-neon); 
-    padding: 15px; 
-    width: 100%; 
-    margin-bottom: 10px; 
-    cursor: pointer; 
-  }
-
-  .btn-aposta { 
-    background: #132237; 
-    color: var(--azul-neon); 
-    border: 1px solid #1b4965; 
-    padding: 10px; 
-    cursor: pointer; 
-    font-size: 0.8rem; 
-  }
-
-  .btn-aposta:hover { 
-    border-color: var(--azul-neon); 
-    background: var(--azul-arena); 
-  }
-
-  /* Fundo fixo para qualquer modal que abrir */
-  #arena-modal, #modal-convite { 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100vw; 
-    height: 100vh; 
-    background: rgba(2, 8, 19, 0.95); 
-    z-index: 10000; 
-    display: none; 
-    align-items: center; 
-    justify-content: center; 
-  }
-
-  .arena-content, .convite-content { 
-    width: 90%; 
-    max-width: 400px; 
-    background: linear-gradient(145deg, #060e18, #0d1b2a); 
-    border: 2px solid var(--azul-neon); 
-    border-radius: 15px; 
-    padding: 25px; 
-    box-shadow: 0 0 30px rgba(0, 191, 255, 0.3); 
-    position: relative; 
-  }
-
-  #status { 
-    margin-top: 15px; 
-    font-size: 0.9rem; 
-    color: var(--amarelo-campeao); 
-  }
-
+ <style>
+  .rank-team-sub { display: block; font-size: 0.65rem; color: #88c0d0; } 
+  .container { width: 90%; max-width: 400px; margin-top: 50px; padding: 20px; border: 2px solid var(--azul-neon); border-radius: 15px; background: rgba(6, 14, 24, 0.95); box-shadow: 0 0 20px rgba(0, 191, 255, 0.4); text-align: center; } 
+  h1 { color: var(--azul-neon); text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px #000, 0 0 10px rgba(0, 191, 255, 0.6); font-size: 1.5rem; } 
+  .input-group { margin: 15px 0; text-align: left; } 
+  label { display: block; color: #e5e9f0; margin-bottom: 5px; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; } 
+  input { width: 100%; padding: 10px; background: #132237; border: 1px solid var(--azul-arena); color: white; border-radius: 5px; box-sizing: border-box; transition: 0.3s; } 
+  input:focus { border-color: var(--azul-neon); box-shadow: 0 0 8px rgba(0, 191, 255, 0.5); outline: none; } 
+  button { width: 100%; padding: 12px; background: linear-gradient(to bottom, var(--azul-neon), #05668d); border: none; color: white; font-weight: bold; text-transform: uppercase; cursor: pointer; border-radius: 5px; margin-top: 10px; transition: 0.3s; text-shadow: 1px 1px 2px black; } 
+  button:hover { background: linear-gradient(to bottom, #00d2ff, var(--azul-neon)); transform: scale(1.02); } 
+  /* Garante o visual das tags de status no Ranking */ 
+  .stat-tag { font-size: 0.65rem; background: rgba(0, 191, 255, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(0, 191, 255, 0.3); color: #e5e9f0; margin-right: 4px; } 
+  #custom-notification { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(145deg, #0d1b2a, #060e18); border: 2px solid var(--vermelho-liga); border-radius: 8px; padding: 15px 25px; z-index: 9999; box-shadow: 0 0 15px rgba(255, 31, 31, 0.4); transition: all 0.5s ease; } 
+  .notif-content { display: flex; align-items: center; gap: 10px; color: white; font-weight: bold; text-shadow: 1px 1px 2px black; } 
+  #notif-icon { font-size: 1.2rem; } 
+  .ranking-row-item { display: flex; flex-direction: column; padding: 12px; border-bottom: 1px solid rgba(0, 191, 255, 0.1); background: rgba(13, 27, 42, 0.4); margin-bottom: 5px; border-radius: 5px; } 
+  .rank-stats-row { display: flex; gap: 8px; font-size: 0.65rem; color: #aebac7; margin-top: 4px; text-transform: uppercase; } 
+  .win-streak { color: var(--amarelo-campeao); font-weight: bold; text-shadow: 0 0 5px rgba(255, 222, 0, 0.6); animation: pulse 1.5s infinite; } 
+  @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; text-shadow: 0 0 10px var(--amarelo-campeao); } 100% { opacity: 0.8; } } 
+  .winrate-high { color: #00ffcc; } 
+  .duelos-warning { color: #ff9f43; } 
+  .btn-lobby { background: var(--azul-arena); color: white; border: 1px solid var(--azul-neon); padding: 15px; width: 100%; margin-bottom: 10px; cursor: pointer; } 
+  .btn-aposta { background: #132237; color: var(--azul-neon); border: 1px solid #1b4965; padding: 10px; cursor: pointer; font-size: 0.8rem; } 
+  .btn-aposta:hover { border-color: var(--azul-neon); background: var(--azul-arena); } 
+  /* Fundo fixo para qualquer modal que abrir */ 
+  #arena-modal, #modal-convite { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 8, 19, 0.95); z-index: 10000; display: none; align-items: center; justify-content: center; } 
+  .arena-content, .convite-content { width: 90%; max-width: 400px; background: linear-gradient(145deg, #060e18, #0d1b2a); border: 2px solid var(--azul-neon); border-radius: 15px; padding: 25px; box-shadow: 0 0 30px rgba(0, 191, 255, 0.3); position: relative; } 
+  #status { margin-top: 15px; font-size: 0.9rem; color: var(--amarelo-campeao); } 
   .hidden { display: none; }
 </style>
-</head>
-<body>
 
   <!-- TELA DE REGISTRO/LOGIN -->
   <div id="auth-screen" class="container">
