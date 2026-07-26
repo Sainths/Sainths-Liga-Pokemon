@@ -804,27 +804,30 @@ async function abrirLobby(modo, valor) {
 // O segredo está nesta primeira linha: ASYNC FUNCTION
 async function atualizarListaFila(modo, valor) {
   const listaDiv = document.getElementById('lista-disponiveis');
-  const userStr = localStorage.getItem('treinador_vgc');
+  
+  // CORREÇÃO CIRÚRGICA: Busca a memória correta do treinador logado (treinador_vgc)
+  const userStr = localStorage.getItem('treinador_vgc') || localStorage.getItem('duelista'); 
   if (!userStr || !listaDiv) return;
   const user = JSON.parse(userStr);
+  
+  // Garante que o nome do usuário exista, independente de como foi salvo no aparelho
+  const meuNome = user.nome || user.treinador; 
 
   try {
-    // 1. CHECAGEM DE STATUS (Sua lógica original exata de Yu-Gi-Oh adaptada para VGC)
-    const respCheck = await fetch(`${URL_API}?action=statusPartida&nome=${user.nome}`, { redirect: 'follow' });
+    // 1. CHECAGEM DE STATUS (Sua lógica original intacta, apenas usando meuNome)
+    const respCheck = await fetch(`${URL_API}?action=statusPartida&nome=${meuNome}`, { redirect: 'follow' });
     const statusD = await respCheck.json();
 
     if (statusD && statusD.emAndamento) {
       if (statusD.subStatus === "PENDENTE" && statusD.souDesafiado) {
         mostrarConviteEstiloso(statusD.oponente, statusD.modo, statusD.idPartida);
         return;
-      } 
-      else if (statusD.subStatus === "ACEITO") {
+      } else if (statusD.subStatus === "ACEITO") {
         dueloAtivoID = statusD.idPartida;
         abrirPainelResultado(statusD.oponente);
         return;
       }
-    } 
-    else if (statusD && statusD.recusado) {
+    } else if (statusD && statusD.recusado) {
       avisarReino(`O confronto VGC contra ${statusD.oponente} foi recusado.`, "❌");
       if (loopArena) { clearInterval(loopArena); loopArena = null; }
       document.getElementById('lobby-espera').classList.add('hidden');
@@ -835,15 +838,15 @@ async function atualizarListaFila(modo, valor) {
       return;
     }
 
-    // 2. BUSCA DE OPONENTES (Voltando para a sua lógica original de array que funcionava!)
+    // 2. BUSCA DE OPONENTES (Sua lógica de filtro original intocada)
     const respFila = await fetch(`${URL_API}?action=lerFila`, { redirect: 'follow' });
     const fila = await respFila.json();
-    
-    // Na sua lógica original, os dados da fila vêm mapeados como: nome, modo, valor
-    const oponentes = fila.filter(f => f.modo === modo && f.valor == valor && f.nome !== user.nome);
-    
+
+    // Filtra usando o meuNome corrigido para não dar erro
+    const oponentes = fila.filter(f => f.modo === modo && f.valor == valor && f.nome !== meuNome);
+
     listaDiv.innerHTML = oponentes.length === 0 ? "<p style='padding:10px; font-size:0.7rem; color:#64748b;'>Aguardando pareamento...</p>" : "";
-    
+
     oponentes.forEach(op => {
       listaDiv.innerHTML += `
         <div class="ranking-row-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px; margin-bottom: 4px;">
@@ -851,10 +854,12 @@ async function atualizarListaFila(modo, valor) {
           <button onclick="desafiar('${op.nome}','${modo}',${valor})" style="background:var(--azul-neon); color:white; padding:6px 12px; font-size:0.7rem; width:auto; margin:0;"> DESAFIAR </button>
         </div>`;
     });
+
   } catch (e) {
     console.warn("Sincronizando Link Arena...", e);
   }
 }
+
   
 async function desafiar(nomeOp, modo, valor) {
   const user = JSON.parse(localStorage.getItem('treinador_vgc'));
