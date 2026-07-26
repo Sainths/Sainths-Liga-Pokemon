@@ -809,24 +809,21 @@ async function atualizarListaFila(modo, valor) {
   const user = JSON.parse(userStr);
 
   try {
-    // 1. CHECAGEM DE STATUS (Convites, Aceites e Recusas)
+    // 1. CHECAGEM DE STATUS (Sua lógica original exata de Yu-Gi-Oh adaptada para VGC)
     const respCheck = await fetch(`${URL_API}?action=statusPartida&nome=${user.nome}`, { redirect: 'follow' });
     const statusD = await respCheck.json();
 
     if (statusD && statusD.emAndamento) {
-      // CORREÇÃO CIRÚRGICA: Força o modal de convite a aparecer na tela do desafiado com os dados de Pokémon
       if (statusD.subStatus === "PENDENTE" && statusD.souDesafiado) {
         mostrarConviteEstiloso(statusD.oponente, statusD.modo, statusD.idPartida);
         return;
       } 
-      // CASO: SEU DESAFIO FOI ACEITO (Abre a Arena de Resultados)
       else if (statusD.subStatus === "ACEITO") {
         dueloAtivoID = statusD.idPartida;
         abrirPainelResultado(statusD.oponente);
         return;
       }
     } 
-    // CASO: DESAFIO RECUSADO PELO OUTRO TREINADOR
     else if (statusD && statusD.recusado) {
       avisarReino(`O confronto VGC contra ${statusD.oponente} foi recusado.`, "❌");
       if (loopArena) { clearInterval(loopArena); loopArena = null; }
@@ -838,9 +835,11 @@ async function atualizarListaFila(modo, valor) {
       return;
     }
 
-    // 2. BUSCA DE OPONENTES NA FILA (SÓ APARECE QUEM PASSOU PELA TRAVA DE SALDO)
+    // 2. BUSCA DE OPONENTES (Voltando para a sua lógica original de array que funcionava!)
     const respFila = await fetch(`${URL_API}?action=lerFila`, { redirect: 'follow' });
     const fila = await respFila.json();
+    
+    // Na sua lógica original, os dados da fila vêm mapeados como: nome, modo, valor
     const oponentes = fila.filter(f => f.modo === modo && f.valor == valor && f.nome !== user.nome);
     
     listaDiv.innerHTML = oponentes.length === 0 ? "<p style='padding:10px; font-size:0.7rem; color:#64748b;'>Aguardando pareamento...</p>" : "";
