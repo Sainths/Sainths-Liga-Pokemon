@@ -672,7 +672,7 @@ function abrirModulo(tipo) {
 
 // --- FUNÇÃO ABRIR LOBBY COM TRAVA DE SALDO ---
 async function abrirLobby(modo, valor) {
-  const userStr = localStorage.getItem('duelista');
+  const userStr = localStorage.getItem('Jogadores');
   if (!userStr) return;
   const userLocal = JSON.parse(userStr);
 
@@ -711,7 +711,7 @@ async function abrirLobby(modo, valor) {
 // O segredo está nesta primeira linha: ASYNC FUNCTION
 async function atualizarListaFila(modo, valor) {
   const listaDiv = document.getElementById('lista-disponiveis');
-  const userStr = localStorage.getItem('duelista');
+  const userStr = localStorage.getItem('Jogadores');
   if (!userStr || !listaDiv) return;
   const user = JSON.parse(userStr);
 
@@ -1080,7 +1080,7 @@ async function resolverConflito(id, vencedor) {
 }
 
 function logout() {
-  localStorage.removeItem('duelista');
+  localStorage.removeItem('Jogadores');
   location.reload();
 }
 
