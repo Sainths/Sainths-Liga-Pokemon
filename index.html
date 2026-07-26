@@ -800,78 +800,63 @@ async function abrirLobby(modo, valor) {
     console.error("Erro ao estabelecer conexão Link com o Lobby:", e);
   }
 }
+  
 // O segredo está nesta primeira linha: ASYNC FUNCTION
 async function atualizarListaFila(modo, valor) {
   const listaDiv = document.getElementById('lista-disponiveis');
-  const userStr = localStorage.getItem('Jogadores');
+  const userStr = localStorage.getItem('treinador_vgc');
   if (!userStr || !listaDiv) return;
   const user = JSON.parse(userStr);
 
   try {
-    // 1. CHECAGEM DE STATUS (Convites, Aceites e Recusas) - Adaptado para Partidas
+    // 1. CHECAGEM DE STATUS (Convites, Aceites e Recusas)
     const respCheck = await fetch(`${URL_API}?action=statusPartida&nome=${user.nome}`, { redirect: 'follow' });
     const statusD = await respCheck.json();
-    
-    // Log para depuração: Caso precise ver o que o Google respondeu, aperte F12
-    console.log("Status Recebido da Liga:", statusD);
 
     if (statusD && statusD.emAndamento) {
-      // CASO: VOCÊ É O DESAFIADO (Aparece o Modal de Convite para o Set Bo3)
+      // CORREÇÃO CIRÚRGICA: Força o modal de convite a aparecer na tela do desafiado com os dados de Pokémon
       if (statusD.subStatus === "PENDENTE" && statusD.souDesafiado) {
-        const modal = document.getElementById('modal-convite');
-        if (modal && (modal.classList.contains('hidden') || modal.style.display === 'none')) {
-          mostrarConviteEstiloso(statusD.oponente, statusD.modo, statusD.idPartida);
-        }
+        mostrarConviteEstiloso(statusD.oponente, statusD.modo, statusD.idPartida);
         return;
-      }
-      // CASO: SEU DESAFIO FOI ACEITO (Abre a Arena de Combate)
+      } 
+      // CASO: SEU DESAFIO FOI ACEITO (Abre a Arena de Resultados)
       else if (statusD.subStatus === "ACEITO") {
         dueloAtivoID = statusD.idPartida;
         abrirPainelResultado(statusD.oponente);
         return;
       }
-    }
-    // CASO: DESAFIO RECUSADO (Aviso e Reset)
+    } 
+    // CASO: DESAFIO RECUSADO PELO OUTRO TREINADOR
     else if (statusD && statusD.recusado) {
-      if (typeof avisarReino === "function") {
-        avisarReino(`O confronto VGC contra ${statusD.oponente} foi recusado ou cancelado.`, "❌");
-      }
-      if (loopArena) {
-        clearInterval(loopArena);
-        loopArena = null;
-      }
+      avisarReino(`O confronto VGC contra ${statusD.oponente} foi recusado.`, "❌");
+      if (loopArena) { clearInterval(loopArena); loopArena = null; }
       document.getElementById('lobby-espera').classList.add('hidden');
       document.getElementById('painel-resultado').classList.add('hidden');
       document.getElementById('selecao-modo').classList.remove('hidden');
-      
       const modal = document.getElementById('modal-convite');
-      if (modal) {
-        modal.classList.add('hidden');
-        modal.style.display = 'none';
-      }
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
       return;
     }
 
-    // 2. BUSCA DE OPONENTES NA FILA (Exibe quem está na mesma sala/tier)
+    // 2. BUSCA DE OPONENTES NA FILA (SÓ APARECE QUEM PASSOU PELA TRAVA DE SALDO)
     const respFila = await fetch(`${URL_API}?action=lerFila`, { redirect: 'follow' });
     const fila = await respFila.json();
     const oponentes = fila.filter(f => f.modo === modo && f.valor == valor && f.nome !== user.nome);
     
-    listaDiv.innerHTML = oponentes.length === 0 ? "<p style='padding:10px; font-size:0.7rem; color:#64748b;'>Aguardando pareamento de outros Treinadores...</p>" : "";
+    listaDiv.innerHTML = oponentes.length === 0 ? "<p style='padding:10px; font-size:0.7rem; color:#64748b;'>Aguardando pareamento...</p>" : "";
     
     oponentes.forEach(op => {
       listaDiv.innerHTML += `
-        <div class="ranking-row-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid rgba(0,191,255,0.1); background: rgba(13,27,42,0.3); margin-bottom: 4px;">
+        <div class="ranking-row-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px; margin-bottom: 4px;">
           <span style="color:white; font-weight:bold;">${op.nome}</span>
-          <button onclick="desafiar('${op.nome}','${modo}',${valor})" style="background:var(--azul-neon); color:white; border:none; padding:6px 12px; font-weight:bold; cursor:pointer; border-radius:3px; text-transform:uppercase; font-size:0.7rem; text-shadow:1px 1px 1px black;"> DESAFIAR </button>
+          <button onclick="desafiar('${op.nome}','${modo}',${valor})" style="background:var(--azul-neon); color:white; padding:6px 12px; font-size:0.7rem; width:auto; margin:0;"> DESAFIAR </button>
         </div>`;
     });
-
   } catch (e) {
-    console.warn("Sincronizando Link Arena...");
+    console.warn("Sincronizando Link Arena...", e);
   }
 }
-
+  
 async function desafiar(nomeOp, modo, valor) {
   const user = JSON.parse(localStorage.getItem('duelista'));
   
