@@ -155,108 +155,122 @@
       transform: scale(0.98);
     }
 
-    /* Estilo da Tabela de Classificação */
-        .container { 
-      width: 90%; 
-      max-width: 400px; 
-      margin: 50px auto 20px auto; /* Centraliza a caixa na tela */
-      padding: 20px; 
-      border: 2px solid var(--azul-neon); 
-      border-radius: 15px; 
-      background: rgba(6, 14, 24, 0.95); 
-      box-shadow: 0 0 20px rgba(0, 191, 255, 0.4); 
-      text-align: center; 
-      display: flex; /* Ativa o alinhamento flexível */
-      flex-direction: column; /* Organiza os itens em linha vertical */
-      align-items: center; /* Força absolutamente TUDO lá dentro a centralizar */
-      box-sizing: border-box;
-    }
+/* Estilo da Tabela de Classificação */ 
+.container { 
+  width: 90%; 
+  max-width: 600px; /* Aumentado para 600px para acomodar melhor a tabela do ranking */
+  margin: 50px auto 20px auto; /* Centraliza a caixa na tela */ 
+  padding: 20px; 
+  border: 2px solid var(--azul-neon); 
+  border-radius: 15px; 
+  background: rgba(6, 14, 24, 0.95); 
+  box-shadow: 0 0 20px rgba(0, 191, 255, 0.4); 
+  text-align: center; 
+  display: flex; /* Ativa o alinhamento flexível */ 
+  flex-direction: column; /* Organiza os itens em linha vertical */ 
+  align-items: center; /* Força absolutamente TUDO lá dentro a centralizar */ 
+  box-sizing: border-box; 
+}
 
-    .ranking-header {
-      background: var(--azul-arena);
-      color: var(--azul-neon);
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 15px;
-      font-size: 0.7rem;
-      font-weight: bold;
-      border-bottom: 1px solid var(--azul-neon);
-    }
+/* ESSA CLASSE ESTAVA FALTANDO E FOI ADICIONADA */
+.ranking-container {
+  margin: 15px auto 20px auto; /* Centraliza horizontalmente nas laterais */
+  border: 1px solid rgba(0, 191, 255, 0.3);
+  border-radius: 10px;
+  background: rgba(6, 14, 24, 0.95);
+  overflow: hidden;
+  width: 100%; /* Força a tabela a respeitar o miolo centralizado */
+  max-width: 500px; /* Garante que ela não estique demais */
+  box-sizing: border-box;
+}
 
-    .ranking-scroll {
-      max-height: 250px;
-      overflow-y: auto;
-    }
+.ranking-header { 
+  background: var(--azul-arena); 
+  color: var(--azul-neon); 
+  display: flex; 
+  justify-content: space-between; 
+  padding: 8px 15px; 
+  font-size: 0.7rem; 
+  font-weight: bold; 
+  border-bottom: 1px solid var(--azul-neon); 
+} 
 
-    .ranking-title {
-      color: var(--azul-neon);
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      font-size: 1.2rem;
-      text-align: center;
-      margin: 20px 0 10px 0;
-      text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-    }
+.ranking-scroll { 
+  max-height: 250px; 
+  overflow-y: auto; 
+  width: 100%;
+} 
 
-    .ranking-title::before, .ranking-title::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--azul-neon), transparent);
-    }
+.ranking-title { 
+  color: var(--azul-neon); 
+  text-transform: uppercase; 
+  letter-spacing: 3px; 
+  font-size: 1.2rem; 
+  text-align: center; 
+  margin: 20px auto 10px auto; 
+  text-shadow: 0 0 10px rgba(0, 191, 255, 0.5); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 10px; 
+  width: 100%; 
+} 
 
-    .ranking-row-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px;
-      border-bottom: 1px solid rgba(0, 191, 255, 0.1);
-      text-align: left;
-    }
+.ranking-title::before, .ranking-title::after { 
+  content: ""; 
+  flex: 1; 
+  height: 1px; 
+  background: linear-gradient(to right, transparent, var(--azul-neon), transparent); 
+} 
 
-    /* O Líder do Ranking ganha destaque de Campeão */
-    .ranking-row-item:nth-child(1) {
-      background: rgba(255, 222, 0, 0.08);
-      border-left: 3px solid var(--amarelo-campeao);
-    }
+.ranking-row-item { 
+  display: flex; 
+  flex-direction: column; /* Mudado para coluna para as tags e o time ficarem organizados abaixo do nome */
+  padding: 12px; 
+  border-bottom: 1px solid rgba(0, 191, 255, 0.1); 
+  text-align: left; 
+} 
 
-    .ranking-row-item:nth-child(1) .rank-number {
-      color: var(--amarelo-campeao);
-    }
+/* O Líder do Ranking ganha destaque de Campeão */ 
+.ranking-row-item:nth-child(1) { 
+  background: rgba(255, 222, 0, 0.08); 
+  border-left: 3px solid var(--amarelo-campeao); 
+} 
 
-    .rank-stats-row {
-      display: flex;
-      gap: 5px;
-      margin-top: 4px;
-    }
+.ranking-row-item:nth-child(1) .rank-number { 
+  color: var(--amarelo-campeao); 
+} 
 
-    .stat-tag {
-      font-size: 0.6rem;
-      background: rgba(255, 255, 255, 0.08);
-      padding: 2px 4px;
-      border-radius: 3px;
-      color: #d8dee9;
-    }
+.rank-stats-row { 
+  display: flex; 
+  gap: 5px; 
+  margin-top: 4px; 
+} 
 
-    .ranking-info {
-      text-align: left;
-    }
+.stat-tag { 
+  font-size: 0.6rem; 
+  background: rgba(255, 255, 255, 0.08); 
+  padding: 2px 4px; 
+  border-radius: 3px; 
+  color: #d8dee9; 
+} 
 
-    .rank-number {
-      color: var(--azul-neon);
-      font-weight: bold;
-      margin-right: 10px;
-    }
+.ranking-info { 
+  text-align: left; 
+} 
 
-    .team-name {
-      font-size: 0.7rem;
-      display: block;
-      color: #81a1c1;
-    }
+.rank-number { 
+  color: var(--azul-neon); 
+  font-weight: bold; 
+  margin-right: 10px; 
+} 
+
+.team-name { 
+  font-size: 0.7rem; 
+  display: block; 
+  color: #81a1c1; 
+}
+
   </style>
 </head>
   
