@@ -486,7 +486,7 @@ let oponenteAtual = null;
 
 // 1. INICIALIZAÇÃO (Memory Card)
 window.onload = () => {
-  const userLogado = localStorage.getItem('duelista');
+  const userLogado = localStorage.getItem('Jogadores');
   if (userLogado) {
     mostrarArena(JSON.parse(userLogado));
   }
@@ -513,8 +513,8 @@ async function entrarNaArena() {
 
     if (duelista) {
       if (duelista.senha == senha) {
-        localStorage.setItem('duelista', JSON.stringify(duelista));
-        mostrarArena(duelista);
+        localStorage.setItem('Jogadores', JSON.stringify(duelista));
+        mostrarArena(Jogadores);
       } else {
         status.innerText = "Senha de acesso incorreta!";
       }
@@ -531,7 +531,7 @@ async function entrarNaArena() {
           body: JSON.stringify({ action: "registrar", nome, deck, senha })
         });
         const dadosFinais = { nome, deck, vitorias: 0, derrotas: 0, pontos: 0 };
-        localStorage.setItem('duelista', JSON.stringify(dadosFinais));
+        localStorage.setItem('Jogadores', JSON.stringify(dadosFinais));
         mostrarArena(dadosFinais);
       }
     }
