@@ -155,34 +155,40 @@
       transform: scale(0.98);
     }
 
-/* Estilo da Tabela de Classificação */ 
+/* Estilo padrão para a tela de login (Mantém o tamanho original de 400px) */
 .container { 
   width: 90%; 
-  max-width: 600px; /* Aumentado para 600px para acomodar melhor a tabela do ranking */
-  margin: 50px auto 20px auto; /* Centraliza a caixa na tela */ 
+  max-width: 400px; 
+  margin: 50px auto 20px auto; 
   padding: 20px; 
   border: 2px solid var(--azul-neon); 
   border-radius: 15px; 
   background: rgba(6, 14, 24, 0.95); 
   box-shadow: 0 0 20px rgba(0, 191, 255, 0.4); 
   text-align: center; 
-  display: flex; /* Ativa o alinhamento flexível */ 
-  flex-direction: column; /* Organiza os itens em linha vertical */ 
-  align-items: center; /* Força absolutamente TUDO lá dentro a centralizar */ 
   box-sizing: border-box; 
 }
 
-/* ESSA CLASSE ESTAVA FALTANDO E FOI ADICIONADA */
+/* Nova classe exclusiva para a Tela Principal (Fica larga com 600px e expande os widgets) */
+#main-screen.container {
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Força apenas os itens a se alinharem no centro, sem encolher as caixas */
+}
+
+/* Garante que a tabela fique perfeitamente centralizada dentro do painel largo */
 .ranking-container {
-  margin: 15px auto 20px auto; /* Centraliza horizontalmente nas laterais */
+  margin: 15px auto 20px auto;
   border: 1px solid rgba(0, 191, 255, 0.3);
   border-radius: 10px;
   background: rgba(6, 14, 24, 0.95);
   overflow: hidden;
-  width: 100%; /* Força a tabela a respeitar o miolo centralizado */
-  max-width: 500px; /* Garante que ela não estique demais */
+  width: 100%;
+  max-width: 500px; /* Alinha no centro com tamanho ideal de leitura */
   box-sizing: border-box;
 }
+
 
 .ranking-header { 
   background: var(--azul-arena); 
