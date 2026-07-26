@@ -300,6 +300,17 @@
   display: block; 
   color: #81a1c1; 
 }
+    
+/* Remove o recuo padrão do navegador e alinha a lista de regras VGC */
+.scroll-area ul {
+  padding-left: 15px !important;
+  margin: 0;
+  text-align: left;
+}
+
+.scroll-area li {
+  margin-bottom: 5px;
+}
 
   </style>
 </head>
@@ -332,7 +343,7 @@
   #arena-modal, #modal-convite { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 8, 19, 0.95); z-index: 10000; display: none; align-items: center; justify-content: center; } 
   .arena-content, .convite-content { width: 90%; max-width: 400px; background: linear-gradient(145deg, #060e18, #0d1b2a); border: 2px solid var(--azul-neon); border-radius: 15px; padding: 25px; box-shadow: 0 0 30px rgba(0, 191, 255, 0.3); position: relative; } 
   #status { margin-top: 15px; font-size: 0.9rem; color: var(--amarelo-campeao); } 
-  .hidden { display: none; }
+  .hidden { display: none !important; }
 </style>
 
   <!-- TELA DE REGISTRO/LOGIN -->
