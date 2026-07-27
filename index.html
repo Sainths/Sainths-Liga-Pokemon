@@ -791,12 +791,11 @@ async function abrirLobby(modo, valor) {
 // ASYNC FUNCTION - ATUALIZAR LISTA DA FILA (MECÂNICA ORIGINAL RESTAURADA)
 async function atualizarListaFila(modo, valor) {
   const listaDiv = document.getElementById('lista-disponiveis');
-  const userStr = localStorage.getItem('Jogadores'); 
+  const userStr = localStorage.getItem('duelista'); 
   if (!userStr || !listaDiv) return;
   const user = JSON.parse(userStr);
 
   try {
-    // 1. CHECAGEM DE STATUS (Usa action=statusDuelo e idDuelo originais)
     const respCheck = await fetch(`${URL_API}?action=statusDuelo&nome=${user.nome}`, { redirect: 'follow' });
     const statusD = await respCheck.json();
 
@@ -804,29 +803,25 @@ async function atualizarListaFila(modo, valor) {
       if (statusD.subStatus === "PENDENTE" && statusD.souDesafiado) {
         mostrarConviteEstiloso(statusD.oponente, statusD.modo, statusD.idDuelo);
         return;
-      } else if (statusD.subStatus === "ACEITO") {
-        dueloAtivoID = statusD.idDuelo;
+      } 
+      // CORREÇÃO: Quando a partida é aceita, grava o ID do duelo ativo e abre o painel com os botões
+      else if (statusD.subStatus === "ACEITO" || statusD.subStatus === "") {
+        dueloAtivoID = statusD.idDuelo; 
         abrirPainelResultado(statusD.oponente);
         return;
       }
     } else if (statusD && statusD.recusado) {
       avisarReino(`O confronto VGC contra ${statusD.oponente} foi recusado.`, "❌");
-      if (loopArena) {
-        clearInterval(loopArena);
-        loopArena = null;
-      }
+      if (loopArena) { clearInterval(loopArena); loopArena = null; }
       document.getElementById('lobby-espera').classList.add('hidden');
       document.getElementById('painel-resultado').classList.add('hidden');
       document.getElementById('selecao-modo').classList.remove('hidden');
       const modal = document.getElementById('modal-convite');
-      if (modal) {
-        modal.classList.add('hidden');
-        modal.style.display = 'none';
-      }
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
       return;
     }
 
-    // 2. BUSCA DE OPONENTES NA FILA
+    // (O restante do código da busca de oponentes continua igual abaixo...)
     const respFila = await fetch(`${URL_API}?action=lerFila`, { redirect: 'follow' });
     const fila = await respFila.json();
     const oponentes = fila.filter(f => f.modo === modo && f.valor == valor && f.nome !== user.nome);
@@ -839,30 +834,37 @@ async function atualizarListaFila(modo, valor) {
           <button onclick="desafiar('${op.nome}','${modo}',${valor})" style="background:var(--azul-neon); color:white; padding:6px 12px; font-size:0.7rem; width:auto; margin:0;"> DESAFIAR </button>
         </div>`;
     });
-  } catch (e) {
-    console.warn("Sincronizando Link Arena...", e);
-  }
+  } catch (e) { console.warn(e); }
 }
 
 // FUNÇÃO DESAFIAR OPONENTE (ESTRUTURA ORIGINAL DE IDENTIFICAÇÃO SINCRONIZADA)
 async function desafiar(nomeOp, modo, valor) {
-  const userStr = localStorage.getItem('Jogadores');
+  const userStr = localStorage.getItem('duelista'); 
   if (!userStr) return;
   const user = JSON.parse(userStr);
-  
+
   const nomesOrdenados = [user.nome, nomeOp].sort();
-  const idDueloFixo = "D-" + nomesOrdenados; // CORREÇÃO MECÂNICA: Remove o traço extra do miolo para bater com a planilha
+  // CORREÇÃO CIRÚRGICA: Mantém o padrão original exato do seu código que gerava um ID único sem duplicar
+  const idDueloFixo = "D-" + nomesOrdenados[0] + "-" + nomesOrdenados[1]; 
   dueloAtivoID = idDueloFixo;
 
   const listaDiv = document.getElementById('lista-disponiveis');
   if (listaDiv) {
     listaDiv.innerHTML = `<p style="color:var(--azul-neon); padding:20px; font-weight:bold; font-size:0.8rem;">Enviando solicitação Link...<br><span style="color:#64748b; font-weight:normal; font-size:0.7rem;">Aguarde o aceite do oponente.</span></p>`;
   }
+
   try {
     await fetch(URL_API, {
       method: 'POST',
       mode: 'no-cors',
-      body: JSON.stringify({ action: "iniciarDuelo", idDuelo: idDueloFixo, jogador1: user.nome, jogador2: nomeOp, tipo: modo, valor: valor })
+      body: JSON.stringify({ 
+        action: "iniciarDuelo", 
+        idDuelo: idDueloFixo, 
+        jogador1: user.nome, 
+        jogador2: nomeOp, 
+        tipo: modo, 
+        valor: valor 
+      })
     });
   } catch (e) {
     console.error("Falha ao enviar desafio:", e);
