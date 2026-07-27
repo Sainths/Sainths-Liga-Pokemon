@@ -792,48 +792,46 @@ async function abrirLobby(modo, valor) {
   } catch (e) {
     console.error("Erro ao estabelecer conexão Link com o Lobby:", e);
   }
-}
-
-// ASYNC FUNCTION - ATUALIZAR LISTA DA FILA
+  
+// ASYNC FUNCTION - ATUALIZAR LISTA DA FILA (MECÂNICA ORIGINAL RESTAURADA)
 async function atualizarListaFila(modo, valor) {
   const listaDiv = document.getElementById('lista-disponiveis');
-  const userStr = localStorage.getItem('Jogadores'); // Sincronizado para a sua chave correta
+  const userStr = localStorage.getItem('Jogadores'); 
   if (!userStr || !listaDiv) return;
   const user = JSON.parse(userStr);
 
   try {
-    // 1. CHECAGEM DE STATUS (Restaurada ação original "statusDuelo" para bater com a planilha)
+    // 1. CHECAGEM DE STATUS (Usa action=statusDuelo e idDuelo originais)
     const respCheck = await fetch(`${URL_API}?action=statusDuelo&nome=${user.nome}`, { redirect: 'follow' });
     const statusD = await respCheck.json();
 
     if (statusD && statusD.emAndamento) {
+      // CORREÇÃO DEFINITIVA: Passa statusD.idDuelo exatamente como o servidor do Google entrega
       if (statusD.subStatus === "PENDENTE" && statusD.souDesafiado) {
-        mostrarConviteEstiloso(statusD.oponente, statusD.modo, statusD.idDuelo); // Retornado idDuelo original
+        mostrarConviteEstiloso(statusD.oponente, statusD.modo, statusD.idDuelo);
         return;
-      } else if (statusD.subStatus === "ACEITO") {
-        dueloAtivoID = statusD.idDuelo; // Retornado idDuelo original
+      } 
+      else if (statusD.subStatus === "ACEITO") {
+        dueloAtivoID = statusD.idDuelo;
         abrirPainelResultado(statusD.oponente);
         return;
       }
-    } else if (statusD && statusD.recusado) {
+    } 
+    else if (statusD && statusD.recusado) {
       avisarReino(`O confronto VGC contra ${statusD.oponente} foi recusado.`, "❌");
       if (loopArena) { clearInterval(loopArena); loopArena = null; }
       document.getElementById('lobby-espera').classList.add('hidden');
       document.getElementById('painel-resultado').classList.add('hidden');
       document.getElementById('selecao-modo').classList.remove('hidden');
       const modal = document.getElementById('modal-convite');
-      if (modal) {
-        modal.classList.add('hidden');
-        modal.style.display = 'none';
-      }
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
       return;
     }
 
-    // 2. BUSCA DE OPONENTES (Sincronizado com o array que o seu doGet entrega)
+    // 2. BUSCA DE OPONENTES NA FILA
     const respFila = await fetch(`${URL_API}?action=lerFila`, { redirect: 'follow' });
     const fila = await respFila.json();
 
-    // Filtra comparando as propriedades diretas do objeto mapeado pelo seu doGet
     const oponentes = fila.filter(f => f.modo === modo && f.valor == valor && f.nome !== user.nome);
 
     listaDiv.innerHTML = oponentes.length === 0 ? "<p style='padding:10px; font-size:0.7rem; color:#64748b;'>Aguardando pareamento...</p>" : "";
@@ -851,14 +849,14 @@ async function atualizarListaFila(modo, valor) {
   }
 }
 
-// FUNÇÃO DESAFIAR OPONENTE
+// FUNÇÃO DESAFIAR OPONENTE (ESTRUTURA ORIGINAL RESTAURADA)
 async function desafiar(nomeOp, modo, valor) {
-  const userStr = localStorage.getItem('Jogadores'); // Sincronizado para a sua chave correta
+  const userStr = localStorage.getItem('Jogadores'); 
   if (!userStr) return;
   const user = JSON.parse(userStr);
 
   const nomesOrdenados = [user.nome, nomeOp].sort();
-  const idDueloFixo = "D-" + nomesOrdenados[0] + "-" + nomesOrdenados[1]; // Restaurado prefixo original D-
+  const idDueloFixo = "D-" + nomesOrdenados[0] + "-" + nomesOrdenados[1]; 
   dueloAtivoID = idDueloFixo;
 
   const listaDiv = document.getElementById('lista-disponiveis');
@@ -867,7 +865,7 @@ async function desafiar(nomeOp, modo, valor) {
   }
 
   try {
-    // Restaurado gatilho "iniciarDuelo" e propriedade "idDuelo" para casar perfeitamente com a planilha
+    // Sincronizado para disparar action: "iniciarDuelo" e idDuelo para a planilha original processar
     await fetch(URL_API, {
       method: 'POST',
       mode: 'no-cors',
@@ -883,6 +881,49 @@ async function desafiar(nomeOp, modo, valor) {
   } catch (e) {
     console.error("Falha ao enviar desafio:", e);
   }
+}
+
+// FUNÇÃO EXIBIR CONVITE NA TELA (CORRIGIDA COM IDDUELO)
+function mostrarConviteEstiloso(oponente, modo, idDuelo) {
+  const modal = document.getElementById('modal-convite');
+  const texto = document.getElementById('texto-convite');
+  const btnAceitar = document.getElementById('btn-aceitar');
+  const btnRecusar = document.getElementById('btn-recusar');
+
+  if (!modal || !texto || !btnAceitar || !btnRecusar) return;
+
+  // Texto adaptado para o visual VGC Pokémon
+  texto.innerHTML = `O Treinador <b style="color:var(--azul-neon)">${oponente}</b> te desafiou para um Set <b>${modo === 'Normal' ? 'Treino Livre' : 'Valendo Recompensa'}</b>! Aceita ligar os consoles?`;
+
+  modal.classList.remove('hidden');
+  modal.style.display = 'flex';
+
+  // Dispara a rota original aceitarDuelo
+  btnAceitar.onclick = async () => {
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+
+    await fetch(URL_API, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({ action: "aceitarDuelo", idDuelo: idDuelo })
+    });
+
+    dueloAtivoID = idDuelo; 
+    abrirPainelResultado(oponente); 
+  };
+
+  // Dispara a rota original recusarDuelo
+  btnRecusar.onclick = async () => {
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+    
+    await fetch(URL_API, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({ action: "recusarDuelo", idDuelo: idDuelo })
+    });
+  };
 }
 
 function abrirPainelResultado(oponente) {
@@ -970,49 +1011,6 @@ function avisarReino(msg, icone = "🎮") {
   setTimeout(() => {
     notif.classList.add('hidden');
   }, 4000);
-}
-
-function mostrarConviteEstiloso(oponente, modo, idDuelo) { // Corrigido de idPartida para idDuelo
-  const modal = document.getElementById('modal-convite');
-  const texto = document.getElementById('texto-convite');
-  const btnAceitar = document.getElementById('btn-aceitar');
-  const btnRecusar = document.getElementById('btn-recusar');
-
-  if (!modal || !texto || !btnAceitar || !btnRecusar) return;
-
-  // 1. Preenche o texto com o nome do oponente (Formato VGC)
-  texto.innerHTML = `O Treinador <b style="color:var(--azul-neon)">${oponente}</b> te desafiou para um Set <b>${modo === 'Normal' ? 'Treino Livre' : 'Valendo Recompensa'}</b>! Aceita ligar os consoles?`;
-
-  // 2. Exibe o modal centralizado na tela
-  modal.classList.remove('hidden');
-  modal.style.display = 'flex';
-
-  // 3. Ação ao ACEITAR (Restaurado gatilho original "aceitarDuelo" e variável "idDuelo")
-  btnAceitar.onclick = async () => {
-    modal.classList.add('hidden');
-    modal.style.display = 'none';
-
-    await fetch(URL_API, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify({ action: "aceitarDuelo", idDuelo: idDuelo })
-    });
-
-    dueloAtivoID = idDuelo; // Grava o ID do duelo atual na memória
-    abrirPainelResultado(oponente); // Abre a tela de GANHEI/PERDI para você
-  };
-
-  // 4. Ação ao RECUSAR (Restaurado gatilho original "recusarDuelo" e variável "idDuelo")
-  btnRecusar.onclick = async () => {
-    modal.classList.add('hidden');
-    modal.style.display = 'none';
-    
-    await fetch(URL_API, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify({ action: "recusarDuelo", idDuelo: idDuelo })
-    });
-  };
 }
 
 // 1. LÓGICA DE TROCA DE ABAS (Feed da Liga vs Regras Oficiais VGC)
