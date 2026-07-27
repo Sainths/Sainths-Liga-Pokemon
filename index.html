@@ -569,7 +569,7 @@
 <div id="modal-convite" class="hidden" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(2,8,19,0.95); z-index:11000; align-items:center; justify-content:center;">
   <!-- Caixa de convite centralizada -->
 
-<Script>
+<script>
 // CONFIGURAÇÃO INICIAL // --- CONFIGURAÇÃO ---
 const URL_API = "https://script.google.com/macros/s/AKfycbwwW6qsh9UWYKdHLfmPk8udXY36HsUEgvO0eYGqyW4RLKDX08soy_JwdQCKHbafNxCo/exec"; // Cole aqui o link da NOVA IMPLANTAÇÃO do Google
 let loopArena = null;
@@ -606,7 +606,7 @@ async function entrarNaArena() {
     if (duelista) {
       if (duelista.senha == senha) {
         localStorage.setItem('Jogadores', JSON.stringify(duelista));
-        mostrarArena(duelista); // CORRIGIDO: Agora passa o objeto correto que veio da planilha
+        mostrarArena(duelista); // CORREÇÃO MECÂNICA: Agora passa o objeto correto 'duelista' em minúsculo
       } else {
         if (status) status.innerText = "Senha de acesso incorreta!";
       }
@@ -757,17 +757,15 @@ function abrirModulo(tipo) {
 
 // --- FUNÇÃO ABRIR LOBBY COM TRAVA DE SALDO ---
 async function abrirLobby(modo, valor) {
-  const userStr = localStorage.getItem('Jogadores'); // Padronizado para a sua chave correta
+  const userStr = localStorage.getItem('Jogadores');
   if (!userStr) return;
   const userLocal = JSON.parse(userStr);
-
   try {
     const respRanking = await fetch(URL_API, { redirect: 'follow' });
     const jogadores = await respRanking.json();
     const duelistaAtivo = jogadores.find(j => j.nome === userLocal.nome);
     const saldoAtual = duelistaAtivo ? parseInt(duelistaAtivo.pontos) : 0;
 
-    // Trava de saldo mantida com segurança máxima
     if (modo === 'Aposta' && saldoAtual < valor) {
       if (typeof avisarReino === "function") {
         avisarReino(`Bolsa de Insígnias insuficiente! Você possui 🏅${saldoAtual} e o tier exige 🏅${valor}.`, "🚫");
@@ -776,23 +774,20 @@ async function abrirLobby(modo, valor) {
       }
       return;
     }
-
     document.getElementById('selecao-modo').classList.add('hidden');
     document.getElementById('lobby-espera').classList.remove('hidden');
     document.getElementById('titulo-sala').innerText = `Formato: ${modo === 'Normal' ? 'Treino Livre' : 'Valendo ' + valor + ' 🏅'}`;
-
     await fetch(URL_API, {
       method: 'POST',
       mode: 'no-cors',
       body: JSON.stringify({ action: "entrarNaFila", nome: userLocal.nome, modo, valor })
     });
-
     if (loopArena) clearInterval(loopArena);
     loopArena = setInterval(() => atualizarListaFila(modo, valor), 4000);
   } catch (e) {
     console.error("Erro ao estabelecer conexão Link com o Lobby:", e);
   }
-  
+}
 // ASYNC FUNCTION - ATUALIZAR LISTA DA FILA (MECÂNICA ORIGINAL RESTAURADA)
 async function atualizarListaFila(modo, valor) {
   const listaDiv = document.getElementById('lista-disponiveis');
@@ -806,36 +801,37 @@ async function atualizarListaFila(modo, valor) {
     const statusD = await respCheck.json();
 
     if (statusD && statusD.emAndamento) {
-      // CORREÇÃO DEFINITIVA: Passa statusD.idDuelo exatamente como o servidor do Google entrega
       if (statusD.subStatus === "PENDENTE" && statusD.souDesafiado) {
         mostrarConviteEstiloso(statusD.oponente, statusD.modo, statusD.idDuelo);
         return;
-      } 
-      else if (statusD.subStatus === "ACEITO") {
+      } else if (statusD.subStatus === "ACEITO") {
         dueloAtivoID = statusD.idDuelo;
         abrirPainelResultado(statusD.oponente);
         return;
       }
-    } 
-    else if (statusD && statusD.recusado) {
+    } else if (statusD && statusD.recusado) {
       avisarReino(`O confronto VGC contra ${statusD.oponente} foi recusado.`, "❌");
-      if (loopArena) { clearInterval(loopArena); loopArena = null; }
+      if (loopArena) {
+        clearInterval(loopArena);
+        loopArena = null;
+      }
       document.getElementById('lobby-espera').classList.add('hidden');
       document.getElementById('painel-resultado').classList.add('hidden');
       document.getElementById('selecao-modo').classList.remove('hidden');
       const modal = document.getElementById('modal-convite');
-      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
       return;
     }
 
     // 2. BUSCA DE OPONENTES NA FILA
     const respFila = await fetch(`${URL_API}?action=lerFila`, { redirect: 'follow' });
     const fila = await respFila.json();
-
     const oponentes = fila.filter(f => f.modo === modo && f.valor == valor && f.nome !== user.nome);
-
+    
     listaDiv.innerHTML = oponentes.length === 0 ? "<p style='padding:10px; font-size:0.7rem; color:#64748b;'>Aguardando pareamento...</p>" : "";
-
     oponentes.forEach(op => {
       listaDiv.innerHTML += `
         <div class="ranking-row-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px; margin-bottom: 4px;">
@@ -843,119 +839,92 @@ async function atualizarListaFila(modo, valor) {
           <button onclick="desafiar('${op.nome}','${modo}',${valor})" style="background:var(--azul-neon); color:white; padding:6px 12px; font-size:0.7rem; width:auto; margin:0;"> DESAFIAR </button>
         </div>`;
     });
-
   } catch (e) {
     console.warn("Sincronizando Link Arena...", e);
   }
 }
 
-// FUNÇÃO DESAFIAR OPONENTE (ESTRUTURA ORIGINAL RESTAURADA)
+// FUNÇÃO DESAFIAR OPONENTE (ESTRUTURA ORIGINAL DE IDENTIFICAÇÃO SINCRONIZADA)
 async function desafiar(nomeOp, modo, valor) {
-  const userStr = localStorage.getItem('Jogadores'); 
+  const userStr = localStorage.getItem('Jogadores');
   if (!userStr) return;
   const user = JSON.parse(userStr);
-
+  
   const nomesOrdenados = [user.nome, nomeOp].sort();
-  const idDueloFixo = "D-" + nomesOrdenados[0] + "-" + nomesOrdenados[1]; 
+  const idDueloFixo = "D-" + nomesOrdenados; // CORREÇÃO MECÂNICA: Remove o traço extra do miolo para bater com a planilha
   dueloAtivoID = idDueloFixo;
 
   const listaDiv = document.getElementById('lista-disponiveis');
   if (listaDiv) {
     listaDiv.innerHTML = `<p style="color:var(--azul-neon); padding:20px; font-weight:bold; font-size:0.8rem;">Enviando solicitação Link...<br><span style="color:#64748b; font-weight:normal; font-size:0.7rem;">Aguarde o aceite do oponente.</span></p>`;
   }
-
   try {
-    // Sincronizado para disparar action: "iniciarDuelo" e idDuelo para a planilha original processar
     await fetch(URL_API, {
       method: 'POST',
       mode: 'no-cors',
-      body: JSON.stringify({
-        action: "iniciarDuelo",
-        idDuelo: idDueloFixo,
-        jogador1: user.nome,
-        jogador2: nomeOp,
-        tipo: modo,
-        valor: valor
-      })
+      body: JSON.stringify({ action: "iniciarDuelo", idDuelo: idDueloFixo, jogador1: user.nome, jogador2: nomeOp, tipo: modo, valor: valor })
     });
   } catch (e) {
     console.error("Falha ao enviar desafio:", e);
   }
 }
 
-// FUNÇÃO EXIBIR CONVITE NA TELA (CORRIGIDA COM IDDUELO)
+// FUNÇÃO EXIBIR CONVITE NA TELA
 function mostrarConviteEstiloso(oponente, modo, idDuelo) {
   const modal = document.getElementById('modal-convite');
   const texto = document.getElementById('texto-convite');
   const btnAceitar = document.getElementById('btn-aceitar');
   const btnRecusar = document.getElementById('btn-recusar');
-
   if (!modal || !texto || !btnAceitar || !btnRecusar) return;
 
-  // Texto adaptado para o visual VGC Pokémon
   texto.innerHTML = `O Treinador <b style="color:var(--azul-neon)">${oponente}</b> te desafiou para um Set <b>${modo === 'Normal' ? 'Treino Livre' : 'Valendo Recompensa'}</b>! Aceita ligar os consoles?`;
-
   modal.classList.remove('hidden');
   modal.style.display = 'flex';
 
-  // Dispara a rota original aceitarDuelo
   btnAceitar.onclick = async () => {
     modal.classList.add('hidden');
     modal.style.display = 'none';
-
-    await fetch(URL_API, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify({ action: "aceitarDuelo", idDuelo: idDuelo })
-    });
-
-    dueloAtivoID = idDuelo; 
-    abrirPainelResultado(oponente); 
+    await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "aceitarDuelo", idDuelo: idDuelo }) });
+    dueloAtivoID = idDuelo;
+    abrirPainelResultado(oponente);
   };
 
-  // Dispara a rota original recusarDuelo
   btnRecusar.onclick = async () => {
     modal.classList.add('hidden');
     modal.style.display = 'none';
-    
-    await fetch(URL_API, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify({ action: "recusarDuelo", idDuelo: idDuelo })
-    });
+    await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "recusarDuelo", idDuelo: idDuelo }) });
   };
 }
 
 function abrirPainelResultado(oponente) {
-  if (loopArena) { clearInterval(loopArena); loopArena = null; }
+  if (loopArena) {
+    clearInterval(loopArena);
+    loopArena = null;
+  }
   const lobby = document.getElementById('lobby-espera');
   const painel = document.getElementById('painel-resultado');
   const nomeTxt = document.getElementById('oponente-nome');
-
-  if (lobby) { lobby.classList.add('hidden'); lobby.style.display = 'none'; }
-  if (painel) { painel.classList.remove('hidden'); painel.style.display = 'block'; }
-  if (nomeTxt) { nomeTxt.innerText = oponente; }
+  if (lobby) {
+    lobby.classList.add('hidden');
+    lobby.style.display = 'none';
+  }
+  if (painel) {
+    painel.classList.remove('hidden');
+    painel.style.display = 'block';
+  }
+  if (nomeTxt) {
+    nomeTxt.innerText = oponente;
+  }
   console.log("Conexão Link estabelecida! Partida iniciada contra: " + oponente);
 }
 
 // ENVIAR RESULTADO DA PARTIDA
 async function enviarResultado(res) {
-  const userStr = localStorage.getItem('Jogadores'); // Sincronizado para a sua chave correta
+  const userStr = localStorage.getItem('Jogadores');
   if (!userStr) return;
   const user = JSON.parse(userStr);
-
   try {
-    // Restaurado gatilho original "confirmarDuelo" e propriedade "idDuelo"
-    await fetch(URL_API, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify({
-        action: "confirmarDuelo",
-        idDuelo: dueloAtivoID,
-        jogador: user.nome,
-        resultado: res
-      })
-    });
+    await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "confirmarDuelo", idDuelo: dueloAtivoID, jogador: user.nome, resultado: res }) });
     alert("Placar do Set enviado com sucesso! Aguardando validação para atualizar a tabela.");
     location.reload();
   } catch (e) {
@@ -973,33 +942,23 @@ function fecharArena() {
     clearInterval(loopArena);
     loopArena = null;
   }
-  // Remove o treinador da fila para limpar o nome na planilha
   sairDaFila();
 }
 
 async function sairDaFila() {
-  // 1. Limpa o visual das salas
   const lobby = document.getElementById('lobby-espera');
   const selecao = document.getElementById('selecao-modo');
   if (lobby) lobby.classList.add('hidden');
   if (selecao) selecao.classList.remove('hidden');
-  
-  // 2. Remove o registro de busca na planilha do Google (Sincronizado com sua chave Jogadores)
   const userStr = localStorage.getItem('Jogadores');
   if (!userStr) return;
   const user = JSON.parse(userStr);
-  
   try {
-    await fetch(URL_API, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify({ action: "removerDaFila", nome: user.nome })
-    });
+    await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "removerDaFila", nome: user.nome }) });
   } catch (e) {
     console.warn("Desconexão silenciosa da fila.");
   }
 }
-
 // CERTIFIQUE-SE DE QUE NÃO HÁ CHAVES } SOBRANDO ABAIXO DESTA LINHA
 function avisarReino(msg, icone = "🎮") {
   const notif = document.getElementById('custom-notification');
@@ -1052,11 +1011,7 @@ async function resetarTorneio() {
   if (confirm("⚠️ ATENÇÃO: Isso apagará TODOS os pontos, insígnias e o histórico de partidas. Deseja iniciar uma nova temporada?")) {
     const senha = prompt("Digite a senha master do sistema:");
     if (senha === "123") {
-      await fetch(URL_API, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: JSON.stringify({ action: "resetTotal" })
-      });
+      await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "resetTotal" }) });
       alert("A Liga Pokémon foi resetada com sucesso! Reiniciando banco...");
       location.reload();
     }
@@ -1064,23 +1019,15 @@ async function resetarTorneio() {
 }
 
 async function limparFilaGeral() {
-  await fetch(URL_API, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: JSON.stringify({ action: "limparFilaGeral" })
-  });
+  await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "limparFilaGeral" }) });
   alert("Fila de pareamentos limpa!");
 }
 
 async function enviarAvisoGlobal() {
   const texto = document.getElementById('input-global-notif').value;
   if (!texto) return;
-  await fetch(URL_API, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: JSON.stringify({ action: "postarAviso", mensagem: texto })
-  });
-  alert("Feed da Liga updated com sucesso!");
+  await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "postarAviso", mensagem: texto }) });
+  alert("Feed da Liga atualizado com sucesso!");
   document.getElementById('input-global-notif').value = "";
 }
 
@@ -1121,13 +1068,7 @@ async function carregarConflitos() {
 async function resolverConflito(id, vencedor) {
   if (confirm(vencedor === "CANCELAR" ? "Deseja anular este Match por completo?" : `Confirmar vitória oficial de ${vencedor}?`)) {
     try {
-      // Envia usando idDuelo mapeado no seu Script Original do Google
-      await fetch(URL_API, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: JSON.stringify({ action: "resolverConflito", idDuelo: id, vencedor: vencedor })
-      });
-
+      await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "resolverConflito", idDuelo: id, vencedor: vencedor }) });
       avisarReino("Arbitragem concluída! Tabela atualizada.", "⚖️");
       const container = document.getElementById('container-conflitos');
       container.innerHTML = `<p style="color:var(--azul-neon)">Atualizando banco de dados...</p>`;
