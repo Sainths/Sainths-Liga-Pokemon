@@ -972,20 +972,22 @@ function avisarReino(msg, icone = "🎮") {
   }, 4000);
 }
 
-function mostrarConviteEstiloso(oponente, modo, idDuelo) { // Parâmetro renomeado para idDuelo original
+function mostrarConviteEstiloso(oponente, modo, idDuelo) { // Corrigido de idPartida para idDuelo
   const modal = document.getElementById('modal-convite');
   const texto = document.getElementById('texto-convite');
   const btnAceitar = document.getElementById('btn-aceitar');
   const btnRecusar = document.getElementById('btn-recusar');
 
-  // 1. Preenche o texto com o nome do oponente (Adaptado para VGC)
+  if (!modal || !texto || !btnAceitar || !btnRecusar) return;
+
+  // 1. Preenche o texto com o nome do oponente (Formato VGC)
   texto.innerHTML = `O Treinador <b style="color:var(--azul-neon)">${oponente}</b> te desafiou para um Set <b>${modo === 'Normal' ? 'Treino Livre' : 'Valendo Recompensa'}</b>! Aceita ligar os consoles?`;
 
-  // 2. Exibe o modal centralizado
+  // 2. Exibe o modal centralizado na tela
   modal.classList.remove('hidden');
   modal.style.display = 'flex';
 
-  // 3. Ação ao ACEITAR (Restaurado gatilho original aceitarDuelo e idDuelo)
+  // 3. Ação ao ACEITAR (Restaurado gatilho original "aceitarDuelo" e variável "idDuelo")
   btnAceitar.onclick = async () => {
     modal.classList.add('hidden');
     modal.style.display = 'none';
@@ -996,11 +998,11 @@ function mostrarConviteEstiloso(oponente, modo, idDuelo) { // Parâmetro renomea
       body: JSON.stringify({ action: "aceitarDuelo", idDuelo: idDuelo })
     });
 
-    dueloAtivoID = idDuelo; // Grava o ID do duelo atual
-    abrirPainelResultado(oponente); // Manda você para a tela de Reportar Placar
+    dueloAtivoID = idDuelo; // Grava o ID do duelo atual na memória
+    abrirPainelResultado(oponente); // Abre a tela de GANHEI/PERDI para você
   };
 
-  // 4. Ação ao RECUSAR (Restaurado gatilho original recusarDuelo e idDuelo)
+  // 4. Ação ao RECUSAR (Restaurado gatilho original "recusarDuelo" e variável "idDuelo")
   btnRecusar.onclick = async () => {
     modal.classList.add('hidden');
     modal.style.display = 'none';
