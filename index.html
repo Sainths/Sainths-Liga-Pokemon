@@ -44,6 +44,8 @@
       align-items: flex-end;
       gap: 10px;
       margin: 20px 0;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .podium-card {
@@ -86,7 +88,6 @@
       text-overflow: ellipsis;
     }
 
-    /* Alterado de deck para team (Time VGC) */
     .rank-team {
       font-size: 0.65rem;
       color: #88c0d0;
@@ -98,99 +99,80 @@
       margin-top: 5px;
     }
 
-/* Dá um distanciamento confortável para o texto não colar nas bordas */
-.scroll-area {
-  height: 80px;
-  padding: 10px 15px; /* Adicionado 15px nas laterais para afastar da borda */
-  overflow-y: auto;
-  font-size: 0.8rem;
-  color: #e5e9f0;
-  box-sizing: border-box; /* Garante que o padding não aumente o tamanho da caixa */
-}
+    /* Áreas de Rolagem de Texto */
+    .scroll-area {
+      height: 80px;
+      padding: 10px 15px;
+      overflow-y: auto;
+      font-size: 0.8rem;
+      color: #e5e9f0;
+      box-sizing: border-box;
+    }
 
-/* Força o grid de estatísticas a se comportar perfeitamente no painel */
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 15px;
-  width: 100%;
-  box-sizing: border-box;
-}
+    /* Estilização das Regras VGC e Listas */
+    .scroll-area ul {
+      padding-left: 20px;
+      margin: 10px 0;
+      text-align: left;
+      width: 100%;
+      box-sizing: border-box;
+    }
 
-/* Garante o alinhamento centralizado de cada caixinha individual */
-.stat-item {
-  background: rgba(10, 46, 92, 0.4);
-  border: 1px solid var(--azul-neon);
-  padding: 10px;
-  border-radius: 5px;
-  text-align: center;
-  box-sizing: border-box;
-}
+    .scroll-area li {
+      margin-bottom: 8px;
+      color: #e5e9f0;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      text-align: left;
+    }
 
-/* CORREÇÃO DO MESTRE DAS INSÍGNIAS: Força o bloco a se alinhar e centralizar perfeitamente */
-.stat-item.shark {
-  grid-column: span 2;
-  width: 100%;
-  border-color: var(--vermelho-liga);
-  box-shadow: 0 0 10px rgba(255, 31, 31, 0.3);
-  text-align: center;
-  display: block; /* Garante que se comporte como um bloco firme no grid */
-  box-sizing: border-box;
-}
+    .scroll-area p {
+      margin: 5px 0;
+      text-align: left;
+      line-height: 1.4;
+    }
 
+    /* Grid de Estatísticas */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+      width: 100%;
+      box-sizing: border-box;
+    }
 
-/* Força a seção de Feed da Liga e Regras VGC a abrir no tamanho grande original */
-.info-section {
-  background: #020813;
-  border: 1px solid var(--azul-neon);
-  border-radius: 5px;
-  text-align: left;
-  width: 100%; /* Abre o feed na largura total horizontal */
-  box-sizing: border-box;
-  margin-bottom: 15px;
-}
+    .stat-item {
+      background: rgba(10, 46, 92, 0.4);
+      border: 1px solid var(--azul-neon);
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      box-sizing: border-box;
+    }
 
-/* Garante que o botão de entrar na fila ocupe a barra inteira inferior */
-.btn-battle {
-  width: 100%;
-  box-sizing: border-box;
-}
+    .stat-item.shark {
+      grid-column: span 2;
+      width: 100%;
+      border-color: var(--vermelho-liga);
+      box-shadow: 0 0 10px rgba(255, 31, 31, 0.3);
+      text-align: center;
+      display: block;
+      box-sizing: border-box;
+    }
 
-
-    /* Mural de Avisos Globais da Liga */
+    /* Seções de Informação (Feed unificado e sem duplicidade) */
     .info-section {
       background: #020813;
       border: 1px solid var(--azul-neon);
       border-radius: 5px;
       text-align: left;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 15px;
     }
 
-    /* Estilização e Alinhamento Perfeito das Regras VGC */
-.scroll-area ul {
-  padding-left: 20px !important;
-  margin: 10px 0 !important;
-  text-align: left !important;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.scroll-area li {
-  margin-bottom: 8px !important;
-  color: #e5e9f0 !important;
-  font-size: 0.8rem !important;
-  line-height: 1.5 !important;
-  text-align: left !important;
-}
-
-/* Garante que o texto de dentro do feed também fique bem posicionado */
-.scroll-area p {
-  margin: 5px 0 !important;
-  text-align: left !important;
-  line-height: 1.4;
-}
-
-    /* Botão Principal de Registrar Partida VGC */
+    /* Botão Principal */
     .btn-battle {
       width: 100%;
       padding: 15px;
@@ -204,165 +186,150 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       transition: 0.2s;
+      box-sizing: border-box;
     }
 
     .btn-battle:active {
       transform: scale(0.98);
     }
 
-/* Estilo padrão para a tela de login (Mantém o tamanho original de 400px) */
-.container { 
-  width: 90%; 
-  max-width: 400px; 
-  margin: 50px auto 20px auto; 
-  padding: 20px; 
-  border: 2px solid var(--azul-neon); 
-  border-radius: 15px; 
-  background: rgba(6, 14, 24, 0.95); 
-  box-shadow: 0 0 20px rgba(0, 191, 255, 0.4); 
-  text-align: center; 
-  box-sizing: border-box; 
-}
+    /* Telas e Containers */
+    .container { 
+      width: 90%; 
+      max-width: 400px; 
+      margin: 50px auto 20px auto; 
+      padding: 20px; 
+      border: 2px solid var(--azul-neon); 
+      border-radius: 15px; 
+      background: rgba(6, 14, 24, 0.95); 
+      box-shadow: 0 0 20px rgba(0, 191, 255, 0.4); 
+      text-align: center; 
+      box-sizing: border-box; 
+    }
 
-/* Nova classe exclusiva para a Tela Principal (Fica larga com 600px e expande os widgets) */
-#main-screen.container {
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Força apenas os itens a se alinharem no centro, sem encolher as caixas */
-}
+    #main-screen.container {
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-/* Garante que a tabela fique perfeitamente centralizada dentro do painel largo */
-.ranking-container {
-  margin: 15px auto 20px auto;
-  border: 1px solid rgba(0, 191, 255, 0.3);
-  border-radius: 10px;
-  background: rgba(6, 14, 24, 0.95);
-  overflow: hidden;
-  width: 100%;
-  max-width: 500px; /* Alinha no centro com tamanho ideal de leitura */
-  box-sizing: border-box;
-}
+    .ranking-container {
+      margin: 15px auto 20px auto;
+      border: 1px solid rgba(0, 191, 255, 0.3);
+      border-radius: 10px;
+      background: rgba(6, 14, 24, 0.95);
+      overflow: hidden;
+      width: 100%;
+      max-width: 500px;
+      box-sizing: border-box;
+    }
 
+    .ranking-header { 
+      background: var(--azul-arena); 
+      color: var(--azul-neon); 
+      display: flex; 
+      justify-content: space-between; 
+      padding: 8px 15px; 
+      font-size: 0.7rem; 
+      font-weight: bold; 
+      border-bottom: 1px solid var(--azul-neon); 
+    } 
 
-.ranking-header { 
-  background: var(--azul-arena); 
-  color: var(--azul-neon); 
-  display: flex; 
-  justify-content: space-between; 
-  padding: 8px 15px; 
-  font-size: 0.7rem; 
-  font-weight: bold; 
-  border-bottom: 1px solid var(--azul-neon); 
+    .ranking-scroll { 
+      max-height: 250px; 
+      overflow-y: auto; 
+      width: 100%;
+    } 
+
+    .ranking-title { 
+      color: var(--azul-neon); 
+      text-transform: uppercase; 
+      letter-spacing: 3px; 
+      font-size: 1.2rem; 
+      text-align: center; 
+      margin: 20px auto 10px auto; 
+      text-shadow: 0 0 10px rgba(0, 191, 255, 0.5); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 10px; 
+      width: 100%; 
+    } 
+
+    .ranking-title::before, .ranking-title::after { 
+      content: ""; 
+      flex: 1; 
+      height: 1px; 
+      background: linear-gradient(to right, transparent, var(--azul-neon), transparent); 
 } 
 
-.ranking-scroll { 
-  max-height: 250px; 
-  overflow-y: auto; 
-  width: 100%;
-} 
+    .ranking-row-item { 
+      display: flex; 
+      flex-direction: column; 
+      padding: 12px; 
+      border-bottom: 1px solid rgba(0, 191, 255, 0.1); 
+      text-align: left; 
+    } 
 
-.ranking-title { 
-  color: var(--azul-neon); 
-  text-transform: uppercase; 
-  letter-spacing: 3px; 
-  font-size: 1.2rem; 
-  text-align: center; 
-  margin: 20px auto 10px auto; 
-  text-shadow: 0 0 10px rgba(0, 191, 255, 0.5); 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 10px; 
-  width: 100%; 
-} 
+    .ranking-row-item:nth-child(1) { 
+      background: rgba(255, 222, 0, 0.08); 
+      border-left: 3px solid var(--amarelo-campeao); 
+    } 
 
-.ranking-title::before, .ranking-title::after { 
-  content: ""; 
-  flex: 1; 
-  height: 1px; 
-  background: linear-gradient(to right, transparent, var(--azul-neon), transparent); 
-} 
+    .ranking-row-item:nth-child(1) .rank-number { 
+      color: var(--amarelo-campeao); 
+    } 
 
-.ranking-row-item { 
-  display: flex; 
-  flex-direction: column; /* Mudado para coluna para as tags e o time ficarem organizados abaixo do nome */
-  padding: 12px; 
-  border-bottom: 1px solid rgba(0, 191, 255, 0.1); 
-  text-align: left; 
-} 
+    .rank-stats-row { 
+      display: flex; 
+      gap: 5px; 
+      margin-top: 4px; 
+    } 
 
-/* O Líder do Ranking ganha destaque de Campeão */ 
-.ranking-row-item:nth-child(1) { 
-  background: rgba(255, 222, 0, 0.08); 
-  border-left: 3px solid var(--amarelo-campeao); 
-} 
+    .stat-tag { 
+      font-size: 0.6rem; 
+      background: rgba(255, 255, 255, 0.08); 
+      padding: 2px 4px; 
+      border-radius: 3px; 
+      color: #d8dee9; 
+    } 
 
-.ranking-row-item:nth-child(1) .rank-number { 
-  color: var(--amarelo-campeao); 
-} 
+    .ranking-info { 
+      text-align: left; 
+    } 
 
-.rank-stats-row { 
-  display: flex; 
-  gap: 5px; 
-  margin-top: 4px; 
-} 
+    .rank-number { 
+      color: var(--azul-neon); 
+      font-weight: bold; 
+      margin-right: 10px; 
+    } 
 
-.stat-tag { 
-  font-size: 0.6rem; 
-  background: rgba(255, 255, 255, 0.08); 
-  padding: 2px 4px; 
-  border-radius: 3px; 
-  color: #d8dee9; 
-} 
-
-.ranking-info { 
-  text-align: left; 
-} 
-
-.rank-number { 
-  color: var(--azul-neon); 
-  font-weight: bold; 
-  margin-right: 10px; 
-} 
-
-.team-name { 
-  font-size: 0.7rem; 
-  display: block; 
-  color: #81a1c1; 
-}
-    
-/* Remove o recuo padrão do navegador e alinha a lista de regras VGC */
-.scroll-area ul {
-  padding-left: 15px !important;
-  margin: 0;
-  text-align: left;
-}
-
-.scroll-area li {
-  margin-bottom: 5px;
-}
-
+    .team-name { 
+      font-size: 0.7rem; 
+      display: block; 
+      color: #81a1c1; 
+    }
   </style>
 </head>
   
- <style>
+  <style>
   .rank-team-sub { display: block; font-size: 0.65rem; color: #88c0d0; } 
-  .container { width: 90%; max-width: 400px; margin-top: 50px; padding: 20px; border: 2px solid var(--azul-neon); border-radius: 15px; background: rgba(6, 14, 24, 0.95); box-shadow: 0 0 20px rgba(0, 191, 255, 0.4); text-align: center; } 
+  
   h1 { color: var(--azul-neon); text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px #000, 0 0 10px rgba(0, 191, 255, 0.6); font-size: 1.5rem; } 
   .input-group { margin: 15px 0; text-align: left; } 
   label { display: block; color: #e5e9f0; margin-bottom: 5px; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; } 
   input { width: 100%; padding: 10px; background: #132237; border: 1px solid var(--azul-arena); color: white; border-radius: 5px; box-sizing: border-box; transition: 0.3s; } 
   input:focus { border-color: var(--azul-neon); box-shadow: 0 0 8px rgba(0, 191, 255, 0.5); outline: none; } 
+  
   button { width: 100%; padding: 12px; background: linear-gradient(to bottom, var(--azul-neon), #05668d); border: none; color: white; font-weight: bold; text-transform: uppercase; cursor: pointer; border-radius: 5px; margin-top: 10px; transition: 0.3s; text-shadow: 1px 1px 2px black; } 
   button:hover { background: linear-gradient(to bottom, #00d2ff, var(--azul-neon)); transform: scale(1.02); } 
-  /* Garante o visual das tags de status no Ranking */ 
-  .stat-tag { font-size: 0.65rem; background: rgba(0, 191, 255, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(0, 191, 255, 0.3); color: #e5e9f0; margin-right: 4px; } 
+  
+  /* Corrigido estilo de notificação e modal */
   #custom-notification { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(145deg, #0d1b2a, #060e18); border: 2px solid var(--vermelho-liga); border-radius: 8px; padding: 15px 25px; z-index: 20000 !important; box-shadow: 0 0 15px rgba(255, 31, 31, 0.4); transition: all 0.5s ease; } 
   .notif-content { display: flex; align-items: center; gap: 10px; color: white; font-weight: bold; text-shadow: 1px 1px 2px black; } 
   #notif-icon { font-size: 1.2rem; } 
-  .ranking-row-item { display: flex; flex-direction: column; padding: 12px; border-bottom: 1px solid rgba(0, 191, 255, 0.1); background: rgba(13, 27, 42, 0.4); margin-bottom: 5px; border-radius: 5px; } 
-  .rank-stats-row { display: flex; gap: 8px; font-size: 0.65rem; color: #aebac7; margin-top: 4px; text-transform: uppercase; } 
+  
   .win-streak { color: var(--amarelo-campeao); font-weight: bold; text-shadow: 0 0 5px rgba(255, 222, 0, 0.6); animation: pulse 1.5s infinite; } 
   @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; text-shadow: 0 0 10px var(--amarelo-campeao); } 100% { opacity: 0.8; } } 
   .winrate-high { color: #00ffcc; } 
@@ -370,10 +337,13 @@
   .btn-lobby { background: var(--azul-arena); color: white; border: 1px solid var(--azul-neon); padding: 15px; width: 100%; margin-bottom: 10px; cursor: pointer; } 
   .btn-aposta { background: #132237; color: var(--azul-neon); border: 1px solid #1b4965; padding: 10px; cursor: pointer; font-size: 0.8rem; } 
   .btn-aposta:hover { border-color: var(--azul-neon); background: var(--azul-arena); } 
-  /* Fundo fixo para qualquer modal que abrir */ 
+  
+  /* Modais de Arena e Convites */ 
   #arena-modal, #modal-convite { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 8, 19, 0.95); z-index: 10000; display: none; align-items: center; justify-content: center; } 
   .arena-content, .convite-content { width: 90%; max-width: 400px; background: linear-gradient(145deg, #060e18, #0d1b2a); border: 2px solid var(--azul-neon); border-radius: 15px; padding: 25px; box-shadow: 0 0 30px rgba(0, 191, 255, 0.3); position: relative; } 
-  #status { margin-top: 15px; font-size: 0.9rem; color: var(--amarelo-campeao); } 
+  
+  /* Corrigido ID de status duplicado mudando para classe */
+  .status-message { margin-top: 15px; font-size: 0.9rem; color: var(--amarelo-campeao); } 
   .hidden { display: none !important; }
 </style>
 
@@ -400,10 +370,11 @@
     </div>
     
     <button onclick="entrarNaArena()" id="btn-entrar">ENTRAR NA ARENA</button>
-    <p id="status" style="font-size: 0.8rem; margin-top: 10px; color: var(--amarelo-campeao);"></p>
+    <!-- Alterado id para 'status-login' para evitar quebra no JS -->
+    <p id="status-login" class="status-message" style="font-size: 0.8rem; margin-top: 10px;"></p>
   </div>
 
-  <div id="main-screen" class="container hidden" style="max-width: 600px;">
+  <div id="main-screen" class="container hidden">
     <p>Bem-vindo, <span id="user-name" style="color:var(--amarelo-campeao)">Treinador</span>!</p>
 
     <!-- Botão Secreto do Juiz (Começa escondido) -->
@@ -428,25 +399,25 @@
           <button onclick="enviarAvisoGlobal()" style="width: 100%; background: var(--azul-neon); color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; text-transform: uppercase;"> PUBLICAR AVISO </button>
         </div>
       </div>
-    <!-- Lista de Conflitos -->
-    <div id="lista-conflitos-admin">
-      <label style="color: #aebac7; font-size: 0.7rem; display: block; margin-bottom: 5px; text-transform: uppercase;">⚠️ CONFLITOS DE RESULTADO (Mesa do Organizador):</label>
-      <div id="container-conflitos" style="max-height: 150px; overflow-y: auto; background: rgba(13,27,42,0.5); border: 1px solid rgba(0,191,255,0.2); border-radius: 5px; padding: 5px; font-size: 0.75rem;">
-        <p style="color:#64748b; padding: 10px;">Nenhum conflito reportado entre os Treinadores.</p>
+      
+      <!-- Lista de Conflitos -->
+      <div id="lista-conflitos-admin">
+        <label style="color: #aebac7; font-size: 0.7rem; display: block; margin-bottom: 5px; text-transform: uppercase;">⚠️ CONFLITOS DE RESULTADO (Mesa do Organizador):</label>
+        <div id="container-conflitos" style="max-height: 150px; overflow-y: auto; background: rgba(13,27,42,0.5); border: 1px solid rgba(0,191,255,0.2); border-radius: 5px; padding: 5px; font-size: 0.75rem;">
+          <p style="color:#64748b; padding: 10px;">Nenhum conflito reportado entre os Treinadores.</p>
+        </div>
       </div>
-    </div>
-  </div>
+    </div> <!-- CORREÇÃO: Div de fechamento do painel-admin adicionada corretamente aqui! -->
 
-  <!-- DASHBOARD SUPERIOR (PÓDIO VGC) -->
-  <div class="podium-container">
-    <!-- TOP 2 -->
-    <div class="podium-card silver">
-      <div class="title-badge">🥈 Top 2</div>
-      <div class="rank-name" id="top2-nome">---</div>
-      <div class="rank-team" id="top2-deck">---</div>
-      <div class="rank-stars">🏅 <span id="top2-estrelas">0</span> Insígnias</div>
-    </div>
-    
+    <!-- DASHBOARD SUPERIOR (PÓDIO VGC) -->
+    <div class="podium-container">
+      <!-- TOP 2 -->
+      <div class="podium-card silver">
+        <div class="title-badge">🥈 Top 2</div>
+        <div class="rank-name" id="top2-nome">---</div>
+        <div class="rank-team" id="top2-deck">---</div>
+        <div class="rank-stars">🏅 <span id="top2-estrelas">0</span> Insígnias</div>
+      </div>
     <!-- TOP 1 (CAMPEÃO REGIONAL/INTERNACIONAL) -->
     <div class="podium-card gold king">
       <div class="title-badge" style="color: var(--amarelo-campeao);">👑 CAMPEÃO VGC</div>
@@ -508,8 +479,9 @@
   <button onclick="logout()" style="color:#64748b; background:none; border:none; margin-top:15px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;">Desconectar Treinador</button>
 </div>
 
-<!-- Fundo escuro fixo (Ocupa a tela toda) -->
-<div id="arena-modal" class="hidden" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(2,8,19,0.95); z-index:10000; align-items:center; justify-content:center;">
+<!-- CORREÇÃO: Removido display:none do style inline. Agora o controle é feito puramente pela classe .hidden do CSS, evitando travamentos -->
+<div id="arena-modal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(2,8,19,0.95); z-index:10000; align-items:center; justify-content:center;">
+  
   <!-- Caixa de conteúdo única (Tema Arena Pokémon) -->
   <div style="background: linear-gradient(145deg, #060e18, #0d1b2a); border: 3px solid var(--azul-neon); width: 90%; max-width: 400px; padding: 20px; border-radius: 15px; box-shadow: 0 0 30px rgba(0,191,255,0.4); position: relative; text-align: center;">
     
@@ -549,15 +521,21 @@
     <div id="painel-resultado" class="hidden">
       <p style="color: #aebac7; margin-bottom: 10px; font-size: 0.9rem;">Desafio VGC contra: <br><strong id="oponente-nome" style="color:var(--amarelo-campeao); font-size: 1.2rem;">---</strong></p>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
-        <button onclick="enviarResultado('Vitoria')" style="padding: 15px; background: #00cc88; color: white; border: none; border-radius: 5px; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; box-shadow: 0 4px 0 #009966;">VICTOR (2x0 / 2x1)</button>
-        <button onclick="enviarResultado('Derrota')" style="padding: 15px; background: var(--vermelho-liga); color: white; border: none; border-radius: 5px; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; box-shadow: 0 4px 0 #cc0000;">DEFEAT (0x2 / 1x2)</button>
+        <!-- Ajuste linguístico nas strings de exibição de Vitória/Derrota -->
+        <button onclick="enviarResultado('Vitoria')" style="padding: 15px; background: #00cc88; color: white; border: none; border-radius: 5px; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; box-shadow: 0 4px 0 #009966;">VITÓRIA (2x0 / 2x1)</button>
+        <button onclick="enviarResultado('Derrota')" style="padding: 15px; background: var(--vermelho-liga); color: white; border: none; border-radius: 5px; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; box-shadow: 0 4px 0 #cc0000;">DERROTA (0x2 / 1x2)</button>
         <button onclick="enviarResultado('Empate')" style="grid-column: span 2; padding: 12px; background: #4b5d6c; color: white; border: none; border-radius: 5px; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">EMPATE NO SET</button>
       </div>
+    </div> <!-- Fechamento do painel-resultado -->
+  </div> <!-- Fechamento da caixa de conteúdo interna -->
+</div> <!-- Fechamento do arena-modal -->
+      <!-- Texto informativo do painel de resultados -->
       <p id="msg-aguardo" style="font-size: 0.7rem; color: #64748b; margin-top: 15px;">Reporte o placar final. O sistema aguarda a validação de ambos os lados.</p>
     </div>
   </div>
 </div>
 
+<!-- Notificador customizado para alertas rápidos da Liga -->
 <div id="custom-notification" class="hidden">
   <div class="notif-content">
     <span id="notif-icon">🎮</span>
@@ -565,13 +543,14 @@
   </div>
 </div>
 
-<!-- Fundo escuro do convite -->
-<div id="modal-convite" class="hidden" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(2,8,19,0.95); z-index:11000; align-items:center; justify-content:center;">
-  <!-- Caixa de convite centralizada -->
+<!-- Fundo escuro do convite (CORREÇÃO: Removido display:none do style inline para evitar travamento do JS) -->
+<div id="modal-convite" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(2,8,19,0.95); z-index:11000; align-items:center; justify-content:center;">
+  <!-- Caixa de convite centralizada (Aguardando conteúdo interno) -->
 
+      
 <script>
 // CONFIGURAÇÃO INICIAL // --- CONFIGURAÇÃO ---
-const URL_API = "https://script.google.com/macros/s/AKfycbwwW6qsh9UWYKdHLfmPk8udXY36HsUEgvO0eYGqyW4RLKDX08soy_JwdQCKHbafNxCo/exec"; // Cole aqui o link da NOVA IMPLANTAÇÃO do Google
+const URL_API = "https://script.google.com/macros/s/AKfycbzRbq52ykF8vqtKBw74PC0CezAhqNQJpgDUs_RdYrMGMQQSfuTm_CtZBPhwTLuiVggL/exec"; // Link da implantação do Google Script
 let loopArena = null;
 let dueloAtivoID = null;
 let oponenteAtual = null;
@@ -580,7 +559,11 @@ let oponenteAtual = null;
 window.onload = () => {
   const userLogado = localStorage.getItem('Jogadores');
   if (userLogado) {
-    mostrarArena(JSON.parse(userLogado));
+    try {
+      mostrarArena(JSON.parse(userLogado));
+    } catch(e) {
+      localStorage.removeItem('Jogadores'); // Limpa se estiver corrompido
+    }
   }
 };
 
@@ -588,8 +571,10 @@ window.onload = () => {
 async function entrarNaArena() {
   const nome = document.getElementById('nome').value.trim();
   const senha = document.getElementById('senha').value;
-  const deck = document.getElementById('deck') ? document.getElementById('deck').value : "";
-  const status = document.getElementById('status');
+  const deck = document.getElementById('deck') ? document.getElementById('deck').value.trim() : "";
+  
+  // CORREÇÃO: Puxando o id corrigido 'status-login' da parte anterior
+  const status = document.getElementById('status-login') || document.getElementById('status');
 
   if (!nome || !senha) {
     alert("Informe Nome de Treinador e Senha!");
@@ -601,12 +586,12 @@ async function entrarNaArena() {
   try {
     const resp = await fetch(URL_API, { method: 'GET', redirect: 'follow' });
     const jogadores = await resp.json();
-    const duelista = jogadores.find(j => j.nome.toLowerCase() === nome.toLowerCase());
+    const duelista = jogadores.find(j => j.nome && j.nome.toLowerCase() === nome.toLowerCase());
 
     if (duelista) {
       if (duelista.senha == senha) {
         localStorage.setItem('Jogadores', JSON.stringify(duelista));
-        mostrarArena(duelista); // CORREÇÃO MECÂNICA: Agora passa o objeto correto 'duelista' em minúsculo
+        mostrarArena(duelista); 
       } else {
         if (status) status.innerText = "Senha de acesso incorreta!";
       }
@@ -616,29 +601,41 @@ async function entrarNaArena() {
         registroExtra.classList.remove('hidden');
         if (status) status.innerText = "Novo Treinador detectado! Registre seu Time (6 Pokémon) e entre novamente.";
       } else {
+        if (!deck) {
+          alert("Por favor, digite a lista do seu time de 6 Pokémon para registrar!");
+          return;
+        }
         if (status) status.innerText = "Registrando na Liga...";
+        
+        // CORREÇÃO MECÂNICA: Alterado de no-cors para requisição padrão com tratamento de segurança
         await fetch(URL_API, {
           method: 'POST',
-          mode: 'no-cors',
           body: JSON.stringify({ action: "registrar", nome, deck, senha })
         });
-        const dadosFinais = { nome, deck, vitorias: 0, derrotas: 0, pontos: 0 };
+        
+        const dadosFinais = { nome, deck, baralho: deck, vitorias: 0, derrotas: 0, pontos: 0 };
         localStorage.setItem('Jogadores', JSON.stringify(dadosFinais));
         mostrarArena(dadosFinais);
       }
     }
   } catch (e) {
     if (status) status.innerText = "Erro de conexão. Verifique os servidores ou o link do Google.";
+    console.error(e);
   }
 }
 
 // 3. MOSTRAR DASHBOARD E CARREGAR RANKING
 function mostrarArena(dados) {
+  if(!dados || !dados.nome) return;
   document.getElementById('auth-screen').classList.add('hidden');
-  document.getElementById('arena-modal').classList.add('hidden');
+  
+  const arenaModal = document.getElementById('arena-modal');
+  if(arenaModal) arenaModal.classList.add('hidden');
+  
   document.getElementById('main-screen').classList.remove('hidden');
   const userDisplay = document.getElementById('user-name');
   if (userDisplay) userDisplay.innerText = dados.nome;
+  
   carregarRanking();
   if (typeof verificarAdmin === "function") verificarAdmin(dados.nome);
 }
@@ -650,8 +647,13 @@ async function carregarRanking() {
     const resp = await fetch(URL_API, { method: 'GET', redirect: 'follow' });
     const jogadores = await resp.json();
 
-    // --- 1. LÓGICA DE NOTIFICAÇÃO DO ORGANIZADOR ---
-    if (jogadores.length > 0 && jogadores[0].avisoGlobal) {
+    if (!jogadores || jogadores.length === 0) {
+      listaGeral.innerHTML = '<p style="color:#64748b; padding:10px;">Nenhum treinador cadastrado no momento.</p>';
+      return;
+    }
+
+    // --- 1. LÓGICA DE NOTIFICAÇÃO DO ORGANIZADOR (CORREÇÃO: Verificação de segurança adicional para evitar crash se a planilha estiver vazia) ---
+    if (jogadores[0] && jogadores[0].avisoGlobal) {
       const novaMsg = jogadores[0].avisoGlobal.trim();
       window.ultimaMensagemJuiz = novaMsg;
       if (novaMsg !== "" && novaMsg !== localStorage.getItem('ultimo_aviso_visto')) {
@@ -664,8 +666,8 @@ async function carregarRanking() {
 
     // --- 2. CÁLCULO DOS CARDS DO DASHBOARD ---
     const estrelasTotais = jogadores.reduce((acc, j) => acc + (parseInt(j.pontos) || 0), 0);
-    if (document.getElementById('total-stars') || document.getElementById('total-estrelas')) {
-      const targetId = document.getElementById('total-estrelas') ? 'total-estrelas' : 'total-stars';
+    const targetId = document.getElementById('total-estrelas') ? 'total-estrelas' : 'total-stars';
+    if (document.getElementById(targetId)) {
       document.getElementById(targetId).innerText = estrelasTotais;
     }
 
@@ -694,10 +696,18 @@ async function carregarRanking() {
 
     const preencherTop = (index, id) => {
       const j = jogadores[index];
+      const nomeEl = document.getElementById(`${id}-nome`);
+      const deckEl = document.getElementById(`${id}-deck`);
+      const estrelasEl = document.getElementById(`${id}-estrelas`);
+      
       if (j) {
-        if (document.getElementById(`${id}-nome`)) document.getElementById(`${id}-nome`).innerText = j.nome || "---";
-        if (document.getElementById(`${id}-deck`)) document.getElementById(`${id}-deck`).innerText = j.baralho || j.deck || "---";
-        if (document.getElementById(`${id}-estrelas`)) document.getElementById(`${id}-estrelas`).innerText = j.pontos || "0";
+        if (nomeEl) nomeEl.innerText = j.nome || "---";
+        if (deckEl) deckEl.innerText = j.baralho || j.deck || "---";
+        if (estrelasEl) estrelasEl.innerText = j.pontos || "0";
+      } else {
+        if (nomeEl) nomeEl.innerText = "---";
+        if (deckEl) deckEl.innerText = "---";
+        if (estrelasEl) estrelasEl.innerText = "0";
       }
     };
     preencherTop(0, 'top1');
@@ -744,8 +754,10 @@ function abrirModulo(tipo) {
   if (tipo === 'registrar-duelo') {
     const modal = document.getElementById('arena-modal');
     const selecao = document.getElementById('selecao-modo');
-    modal.classList.remove('hidden');
-    modal.style.display = 'flex';
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.style.display = 'flex';
+    }
     if (selecao) {
       selecao.classList.remove('hidden');
       selecao.style.display = 'block';
@@ -757,7 +769,7 @@ function abrirModulo(tipo) {
 
 // --- FUNÇÃO ABRIR LOBBY COM TRAVA DE SALDO ---
 async function abrirLobby(modo, valor) {
-  const userStr = localStorage.getItem('Jogadores');
+  const userStr = localStorage.getItem('Jogadores'); // CORREÇÃO: Alinhado para usar sempre 'Jogadores'
   if (!userStr) return;
   const userLocal = JSON.parse(userStr);
   try {
@@ -774,29 +786,33 @@ async function abrirLobby(modo, valor) {
       }
       return;
     }
-    document.getElementById('selecao-modo').classList.add('hidden');
-    document.getElementById('lobby-espera').classList.remove('hidden');
-    document.getElementById('titulo-sala').innerText = `Formato: ${modo === 'Normal' ? 'Treino Livre' : 'Valendo ' + valor + ' 🏅'}`;
+    
+    if(document.getElementById('selecao-modo')) document.getElementById('selecao-modo').classList.add('hidden');
+    if(document.getElementById('lobby-espera')) document.getElementById('lobby-espera').classList.remove('hidden');
+    if(document.getElementById('titulo-sala')) document.getElementById('titulo-sala').innerText = `Formato: ${modo === 'Normal' ? 'Treino Livre' : 'Valendo ' + valor + ' 🏅'}`;
+    
+    // Tratamento de envio sem ocultar erros com no-cors
     await fetch(URL_API, {
       method: 'POST',
-      mode: 'no-cors',
       body: JSON.stringify({ action: "entrarNaFila", nome: userLocal.nome, modo, valor })
     });
+    
     if (loopArena) clearInterval(loopArena);
     loopArena = setInterval(() => atualizarListaFila(modo, valor), 4000);
   } catch (e) {
     console.error("Erro ao estabelecer conexão Link com o Lobby:", e);
   }
 }
-// ASYNC FUNCTION - ATUALIZAR LISTA DA FILA (MECÂNICA ORIGINAL RESTAURADA)
+
+// ASYNC FUNCTION - ATUALIZAR LISTA DA FILA (CORREÇÃO DE TRAVAMENTO LOCAL STORAGE)
 async function atualizarListaFila(modo, valor) {
   const listaDiv = document.getElementById('lista-disponiveis');
-  const userStr = localStorage.getItem('duelista'); 
+  const userStr = localStorage.getItem('Jogadores'); // CORREÇÃO DO TRAVAMENTO: Alterado de 'duelista' para 'Jogadores'
   if (!userStr || !listaDiv) return;
   const user = JSON.parse(userStr);
 
   try {
-    const respCheck = await fetch(`${URL_API}?action=statusDuelo&nome=${user.nome}`, { redirect: 'follow' });
+    const respCheck = await fetch(`${URL_API}?action=statusDuelo&nome=${encodeURIComponent(user.nome)}`, { redirect: 'follow' });
     const statusD = await respCheck.json();
 
     if (statusD && statusD.emAndamento) {
@@ -804,24 +820,22 @@ async function atualizarListaFila(modo, valor) {
         mostrarConviteEstiloso(statusD.oponente, statusD.modo, statusD.idDuelo);
         return;
       } 
-      // CORREÇÃO: Quando a partida é aceita, grava o ID do duelo ativo e abre o painel com os botões
       else if (statusD.subStatus === "ACEITO" || statusD.subStatus === "") {
         dueloAtivoID = statusD.idDuelo; 
-        abrirPainelResultado(statusD.oponente);
+        if (typeof abrirPainelResultado === "function") abrirPainelResultado(statusD.oponente);
         return;
       }
     } else if (statusD && statusD.recusado) {
-      avisarReino(`O confronto VGC contra ${statusD.oponente} foi recusado.`, "❌");
+      if (typeof avisarReino === "function") avisarReino(`O confronto VGC contra ${statusD.oponente} foi recusado.`, "❌");
       if (loopArena) { clearInterval(loopArena); loopArena = null; }
-      document.getElementById('lobby-espera').classList.add('hidden');
-      document.getElementById('painel-resultado').classList.add('hidden');
-      document.getElementById('selecao-modo').classList.remove('hidden');
+      if(document.getElementById('lobby-espera')) document.getElementById('lobby-espera').classList.add('hidden');
+      if(document.getElementById('painel-resultado')) document.getElementById('painel-resultado').classList.add('hidden');
+      if(document.getElementById('selecao-modo')) document.getElementById('selecao-modo').classList.remove('hidden');
       const modal = document.getElementById('modal-convite');
       if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
       return;
     }
 
-    // (O restante do código da busca de oponentes continua igual abaixo...)
     const respFila = await fetch(`${URL_API}?action=lerFila`, { redirect: 'follow' });
     const fila = await respFila.json();
     const oponentes = fila.filter(f => f.modo === modo && f.valor == valor && f.nome !== user.nome);
@@ -834,17 +848,16 @@ async function atualizarListaFila(modo, valor) {
           <button onclick="desafiar('${op.nome}','${modo}',${valor})" style="background:var(--azul-neon); color:white; padding:6px 12px; font-size:0.7rem; width:auto; margin:0;"> DESAFIAR </button>
         </div>`;
     });
-  } catch (e) { console.warn(e); }
+  } catch (e) { console.warn("Aviso na atualização da fila:", e); }
 }
 
-// FUNÇÃO DESAFIAR OPONENTE (ESTRUTURA ORIGINAL DE IDENTIFICAÇÃO SINCRONIZADA)
+// FUNÇÃO DESAFIAR OPONENTE (CORREÇÃO DA CHAVE LOCAL STORAGE)
 async function desafiar(nomeOp, modo, valor) {
-  const userStr = localStorage.getItem('duelista'); 
+  const userStr = localStorage.getItem('Jogadores'); // CORREÇÃO: Unificação da chave
   if (!userStr) return;
   const user = JSON.parse(userStr);
 
   const nomesOrdenados = [user.nome, nomeOp].sort();
-  // CORREÇÃO CIRÚRGICA: Mantém o padrão original exato do seu código que gerava um ID único sem duplicar
   const idDueloFixo = "D-" + nomesOrdenados[0] + "-" + nomesOrdenados[1]; 
   dueloAtivoID = idDueloFixo;
 
@@ -856,7 +869,6 @@ async function desafiar(nomeOp, modo, valor) {
   try {
     await fetch(URL_API, {
       method: 'POST',
-      mode: 'no-cors',
       body: JSON.stringify({ 
         action: "iniciarDuelo", 
         idDuelo: idDueloFixo, 
@@ -871,31 +883,38 @@ async function desafiar(nomeOp, modo, valor) {
   }
 }
 
-// FUNÇÃO EXIBIR CONVITE NA TELA
+// FUNÇÃO EXIBIR CONVITE NA TELA (MECÂNICA REESTRUTURADA CONTRA QUEDAS)
 function mostrarConviteEstiloso(oponente, modo, idDuelo) {
   const modal = document.getElementById('modal-convite');
-  const texto = document.getElementById('texto-convite');
-  const btnAceitar = document.getElementById('btn-aceitar');
-  const btnRecusar = document.getElementById('btn-recusar');
-  if (!modal || !texto || !btnAceitar || !btnRecusar) return;
+  
+  // Como o HTML do convite está incompleto, essa função injeta dinamicamente o conteúdo seguro para evitar travar o JS
+  if (modal) {
+    modal.innerHTML = `
+      <div class="convite-content" style="background: linear-gradient(145deg, #060e18, #0d1b2a); border: 2px solid var(--azul-neon); border-radius: 15px; padding: 25px; text-align:center; width:90%; max-width:400px;">
+        <p id="texto-convite" style="color:white; font-size:0.9rem;">O Treinador <b style="color:var(--azul-neon)">${oponente}</b> te desafiou para um Set <b>${modo === 'Normal' ? 'Treino Livre' : 'Valendo Recompensa'}</b>!</p>
+        <div style="display:flex; gap:10px; margin-top:15px;">
+          <button id="btn-aceitar" style="background:#00cc88; color:white; padding:10px; border-radius:5px; margin:0;">ACEITAR</button>
+          <button id="btn-recusar" style="background:var(--vermelho-liga); color:white; padding:10px; border-radius:5px; margin:0;">RECUSAR</button>
+        </div>
+      </div>`;
+      
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
 
-  texto.innerHTML = `O Treinador <b style="color:var(--azul-neon)">${oponente}</b> te desafiou para um Set <b>${modo === 'Normal' ? 'Treino Livre' : 'Valendo Recompensa'}</b>! Aceita ligar os consoles?`;
-  modal.classList.remove('hidden');
-  modal.style.display = 'flex';
+    document.getElementById('btn-aceitar').onclick = async () => {
+      modal.classList.add('hidden');
+      modal.style.display = 'none';
+      await fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "aceitarDuelo", idDuelo: idDuelo }) });
+      dueloAtivoID = idDuelo;
+      if (typeof abrirPainelResultado === "function") abrirPainelResultado(oponente);
+    };
 
-  btnAceitar.onclick = async () => {
-    modal.classList.add('hidden');
-    modal.style.display = 'none';
-    await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "aceitarDuelo", idDuelo: idDuelo }) });
-    dueloAtivoID = idDuelo;
-    abrirPainelResultado(oponente);
-  };
-
-  btnRecusar.onclick = async () => {
-    modal.classList.add('hidden');
-    modal.style.display = 'none';
-    await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "recusarDuelo", idDuelo: idDuelo }) });
-  };
+    document.getElementById('btn-recusar').onclick = async () => {
+      modal.classList.add('hidden');
+      modal.style.display = 'none';
+      await fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "recusarDuelo", idDuelo: idDuelo }) });
+    };
+  }
 }
 
 function abrirPainelResultado(oponente) {
@@ -926,7 +945,11 @@ async function enviarResultado(res) {
   if (!userStr) return;
   const user = JSON.parse(userStr);
   try {
-    await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "confirmarDuelo", idDuelo: dueloAtivoID, jogador: user.nome, resultado: res }) });
+    // Removido o no-cors para garantir sincronismo
+    await fetch(URL_API, { 
+      method: 'POST', 
+      body: JSON.stringify({ action: "confirmarDuelo", idDuelo: dueloAtivoID, jogador: user.nome, resultado: res }) 
+    });
     alert("Placar do Set enviado com sucesso! Aguardando validação para atualizar a tabela.");
     location.reload();
   } catch (e) {
@@ -956,19 +979,24 @@ async function sairDaFila() {
   if (!userStr) return;
   const user = JSON.parse(userStr);
   try {
-    await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "removerDaFila", nome: user.nome }) });
+    await fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "removerDaFila", nome: user.nome }) });
   } catch (e) {
     console.warn("Desconexão silenciosa da fila.");
   }
 }
-// CERTIFIQUE-SE DE QUE NÃO HÁ CHAVES } SOBRANDO ABAIXO DESTA LINHA
+
+// CORREÇÃO MECÂNICA: Adicionado travas contra elementos nulos para evitar crash visual
 function avisarReino(msg, icone = "🎮") {
   const notif = document.getElementById('custom-notification');
-  document.getElementById('notif-text').innerText = msg;
-  document.getElementById('notif-icon').innerText = icone;
+  const txtEl = document.getElementById('notif-text');
+  const icoEl = document.getElementById('notif-icon');
+  
+  if (!notif || !txtEl || !icoEl) return;
+
+  txtEl.innerText = msg;
+  icoEl.innerText = icone;
   notif.classList.remove('hidden');
   
-  // Some após 4 segundos
   setTimeout(() => {
     notif.classList.add('hidden');
   }, 4000);
@@ -1001,10 +1029,14 @@ function verInfo(aba) {
 
 // 2. LÓGICA PARA EXIBIR O PAINEL DO ORGANIZADOR
 function verificarAdmin(nome) {
-  const ADMIN_NOME = "Sainths"; // SUBSTITUA PELO SEU NOME EXATO NA PLANILHA
+  const ADMIN_NOME = "Sainths"; 
   const painel = document.getElementById('painel-admin');
-  if (nome === ADMIN_NOME && painel) {
-    painel.classList.remove('hidden');
+  if (painel) {
+    if (nome === ADMIN_NOME) {
+      painel.classList.remove('hidden');
+    } else {
+      painel.classList.add('hidden');
+    }
   }
 }
 
@@ -1013,7 +1045,7 @@ async function resetarTorneio() {
   if (confirm("⚠️ ATENÇÃO: Isso apagará TODOS os pontos, insígnias e o histórico de partidas. Deseja iniciar uma nova temporada?")) {
     const senha = prompt("Digite a senha master do sistema:");
     if (senha === "123") {
-      await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "resetTotal" }) });
+      await fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "resetTotal" }) });
       alert("A Liga Pokémon foi resetada com sucesso! Reiniciando banco...");
       location.reload();
     }
@@ -1021,28 +1053,32 @@ async function resetarTorneio() {
 }
 
 async function limparFilaGeral() {
-  await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "limparFilaGeral" }) });
+  await fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "limparFilaGeral" }) });
   alert("Fila de pareamentos limpa!");
 }
 
 async function enviarAvisoGlobal() {
-  const texto = document.getElementById('input-global-notif').value;
+  const inputNotif = document.getElementById('input-global-notif');
+  if (!inputNotif) return;
+  const texto = inputNotif.value;
   if (!texto) return;
-  await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "postarAviso", mensagem: texto }) });
-  alert("Feed da Liga atualizado com sucesso!");
-  document.getElementById('input-global-notif').value = "";
+  await fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "postarAviso", mensagem: texto }) });
+  alert("Feed da Liga updated!");
+  inputNotif.value = "";
 }
 
-// 4. CENTRAL DE RESOLUÇÃO DE CONFLITOS DE PLACAR
+// 4. CENTRAL DE RESOLUÇÃO DE CONFLITOS DE PLACAR (CORREÇÃO DE SEGURANÇA CONTRA ELEMENTO NULO)
 async function carregarConflitos() {
   const container = document.getElementById('container-conflitos');
-  if (!container || document.getElementById('painel-admin').classList.contains('hidden')) return;
+  const painelAdmin = document.getElementById('painel-admin');
+  
+  if (!container || !painelAdmin || painelAdmin.classList.contains('hidden')) return;
 
   try {
     const resp = await fetch(`${URL_API}?action=lerConflitos`, { redirect: 'follow' });
     const conflitos = await resp.json();
 
-    if (conflitos.length === 0) {
+    if (!conflitos || conflitos.length === 0) {
       container.innerHTML = `<p style="color:#64748b; padding: 10px;">Nenhum conflito na mesa de arbitragem.</p>`;
       return;
     }
@@ -1058,7 +1094,7 @@ async function carregarConflitos() {
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
             <button onclick="resolverConflito('${c.id}', '${c.j1}')" style="background:#00cc88; color:white; border:none; padding:6px; border-radius:3px; cursor:pointer; font-size:0.6rem; font-weight:bold;">VITÓRIA ${c.j1}</button>
             <button onclick="resolverConflito('${c.id}', '${c.j2}')" style="background:#00cc88; color:white; border:none; padding:6px; border-radius:3px; cursor:pointer; font-size:0.6rem; font-weight:bold;">VITÓRIA ${c.j2}</button>
-            <button onclick="resolverConflito('${c.id}', 'CANCELAR')" style="grid-column: span 2; background:#20334a; color:#aebac7; border:none; padding:6px; border-radius:3px; cursor:pointer; font-size:0.6rem; margin-top:2px;">ANULAR MATCH (Ninguém ganha/perde)</button>
+            <button onclick="resolverConflito('${c.id}', 'CANCELAR')" style="grid-column: span 2; background:#20334a; color:#aebac7; border:none; padding:6px; border-radius:3px; cursor:pointer; font-size:0.6rem; margin-top:2px;">ANULAR MATCH</button>
           </div>
         </div>`;
     });
@@ -1069,18 +1105,26 @@ async function carregarConflitos() {
 
 async function resolverConflito(id, vencedor) {
   if (confirm(vencedor === "CANCELAR" ? "Deseja anular este Match por completo?" : `Confirmar vitória oficial de ${vencedor}?`)) {
-    try {
-      await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "resolverConflito", idDuelo: id, vencedor: vencedor }) });
-      avisarReino("Arbitragem concluída! Tabela atualizada.", "⚖️");
-      const container = document.getElementById('container-conflitos');
-      container.innerHTML = `<p style="color:var(--azul-neon)">Atualizando banco de dados...</p>`;
+    const container = document.getElementById('container-conflitos');
+    if (container) {
+      container.innerHTML = `<p style="color:var(--azul-neon); padding:10px;">Processando decisão na mesa de arbitragem... Por favor, aguarde.</p>`;
+    }
 
-      setTimeout(async () => {
-        await carregarRanking();
-        if (typeof carregarConflitos === "function") await carregarConflitos();
-      }, 4000);
+    try {
+      // CORREÇÃO: Removido no-cors para que o await espere de verdade a planilha atualizar os pontos
+      await fetch(URL_API, { 
+        method: 'POST', 
+        body: JSON.stringify({ action: "resolverConflito", idDuelo: id, vencedor: vencedor }) 
+      });
+      
+      avisarReino("Arbitragem concluída! Tabela atualizada.", "⚖️");
+
+      // Agora recarrega com total segurança dos dados atualizados
+      await carregarRanking();
     } catch (e) {
-      console.error("Erro ao aplicar resolução na mesa do juiz.");
+      console.error("Erro ao aplicar resolução na mesa do juiz.", e);
+      alert("Falha ao comunicar decisão com a planilha. Tente novamente.");
+      if (typeof carregarConflitos === "function") carregarConflitos();
     }
   }
 }
@@ -1094,7 +1138,8 @@ function logout() {
 setInterval(() => {
   const modalArena = document.getElementById('arena-modal');
   if (modalArena) {
-    const arenaAberta = !modalArena.classList.contains('hidden') && modalArena.style.display !== 'none';
+    // CORREÇÃO: Verificação segura considerando a classe .hidden unificada que implementamos
+    const arenaAberta = !modalArena.classList.contains('hidden');
     if (!arenaAberta) {
       carregarRanking();
     }
