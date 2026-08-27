@@ -35,8 +35,10 @@
       box-shadow: 0 0 15px var(--azul-neon);
       margin-bottom: 10px;
       background-color: var(--fundo-escuro);
+      object-fit: cover;        /* CORREÇÃO: Enquadra a imagem sem esticar ou achatar */
+      object-position: center;   /* CORREÇÃO: Garante que o centro do logo fique visível */
     }
-
+  
     /* Organização do Pódio do Torneio VGC */
     .podium-container {
       display: flex;
