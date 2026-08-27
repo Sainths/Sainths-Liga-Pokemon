@@ -500,7 +500,7 @@
     <div id="selecao-modo">
       <p style="color: #aebac7; font-size: 0.8rem; margin-bottom: 15px;">Escolha o tier de recompensa do Set (Melhor de 3):</p>
       <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
-        <button onclick="abrirLobby('Normal', 0)" style="padding: 12px; background: #132237; color: white; border: 1px solid var(--azul-arena); border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">⚔️ TREINO LIVRE</button>
+        <button onclick="abrirLobby('Normal', 0)" style="padding: 12px; background: #132237; color: white; border: 1px solid var(--azul-arena); border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">⚔️ BATALHA LIVRE</button>
         <button onclick="abrirLobby('Aposta', 1)" style="padding: 12px; background: rgba(0,191,255,0.05); color: var(--azul-neon); border: 1px solid var(--azul-neon); border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">✨ VALENDO 1 INSÍGNIA</button>
         <button onclick="abrirLobby('Aposta', 3)" style="padding: 12px; background: rgba(0,191,255,0.05); color: var(--azul-neon); border: 1px solid var(--azul-neon); border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">✨ VALENDO 3 INSÍGNIAS</button>
         <button onclick="abrirLobby('Aposta', 5)" style="padding: 12px; background: rgba(0,191,255,0.05); color: var(--azul-neon); border: 1px solid var(--azul-neon); border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">✨ VALENDO 5 INSÍGNIAS</button>
@@ -789,7 +789,7 @@ async function abrirLobby(modo, valor) {
     
     if(document.getElementById('selecao-modo')) document.getElementById('selecao-modo').classList.add('hidden');
     if(document.getElementById('lobby-espera')) document.getElementById('lobby-espera').classList.remove('hidden');
-    if(document.getElementById('titulo-sala')) document.getElementById('titulo-sala').innerText = `Formato: ${modo === 'Normal' ? 'Treino Livre' : 'Valendo ' + valor + ' ✨'}`;
+    if(document.getElementById('titulo-sala')) document.getElementById('titulo-sala').innerText = `Formato: ${modo === 'Normal' ? 'Batalha Livre' : 'Valendo ' + valor + ' ✨'}`;
     
     // Tratamento de envio sem ocultar erros com no-cors
     await fetch(URL_API, {
