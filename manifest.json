@@ -1,16 +1,16 @@
 {
   "short_name": "PokeChampions",
   "name": "Pokémon Champions League - VGC",
-  "description": "Aplicativo oficial de pareamento e classificação da Liga Pokémon Champions VGC.",
+  "description": "Aplicativo de pareamento e classificação da Liga Pokémon Champions VGC.",
   "icons": [
     {
-      "src": "icone.png",
+      "src": "ícone.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
     },
     {
-      "src": "icone.png",
+      "src": "icone-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
