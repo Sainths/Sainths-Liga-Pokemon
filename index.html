@@ -549,13 +549,43 @@
 <div id="modal-convite" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(2,8,19,0.95); z-index:11000; align-items:center; justify-content:center;">
   <!-- Caixa de convite centralizada (Aguardando conteúdo interno) -->
 
-      
 <script>
 // CONFIGURAÇÃO INICIAL // --- CONFIGURAÇÃO ---
 const URL_API = "https://script.google.com/macros/s/AKfycbzRbq52ykF8vqtKBw74PC0CezAhqNQJpgDUs_RdYrMGMQQSfuTm_CtZBPhwTLuiVggL/exec"; // Link da implantação do Google Script
 let loopArena = null;
 let dueloAtivoID = null;
 let oponenteAtual = null;
+
+// --- FUNÇÃO AUXILIAR: Identifica links do Showdown/Pokepaste e cria o botão clicável ---
+function formatarColunaTimeComLink(textoTime) {
+  if (!textoTime) return `<span style="color: #64748b; font-style: italic;">Não Informado</span>`;
+  
+  var textoLimpo = textoTime.toString().trim();
+  
+  // Verifica se o jogador colou um link legítimo (começa com http://, https:// ou contem pokepaste/showdown)
+  if (textoLimpo.startsWith("http://") || textoLimpo.startsWith("https://") || textoLimpo.includes("pokepaste") || textoLimpo.includes("showdown")) {
+    return `
+      <a href="${textoLimpo}" target="_blank" rel="noopener noreferrer" style="
+        display: inline-block;
+        background: linear-gradient(to bottom, #00bfff, #0a2e5c);
+        color: white;
+        text-decoration: none;
+        padding: 5px 10px;
+        font-size: 0.7rem;
+        font-weight: bold;
+        border-radius: 4px;
+        text-transform: uppercase;
+        border: 1px solid #00bfff;
+        box-shadow: 0 0 5px rgba(0, 191, 255, 0.3);
+        margin-top: 4px;
+        cursor: pointer;
+      ">📋 Ver Team Sheet</a>
+    `;
+  }
+  
+  // Se não for um link, exibe o texto digitado por extenso normalmente, sem quebrar os antigos
+  return `<span>🏃 ${textoLimpo}</span>`;
+}
 
 // 1. INICIALIZAÇÃO (Memory Card)
 window.onload = () => {
@@ -715,7 +745,6 @@ async function carregarRanking() {
     preencherTop(0, 'top1');
     preencherTop(1, 'top2');
     preencherTop(2, 'top3');
-
     listaGeral.innerHTML = "";
     jogadores.forEach((j, i) => {
       const v = parseInt(j.vitorias) || 0;
@@ -741,9 +770,13 @@ async function carregarRanking() {
             <span class="stat-tag" style="background: rgba(255, 31, 31, 0.15); color: var(--vermelho-liga);">D:${d}</span>
             <span class="stat-tag" style="margin-left: auto; color:#88c0d0;">${wr}% WR</span>
           </div>
-          <div style="font-size: 0.65rem; color: #64748b; margin-top: 4px; text-transform: uppercase; letter-spacing:0.5px;">Time: ${userDeck}</div>
+          <!-- CORREÇÃO: Aplica a função inteligente que detecta o link do Showdown e gera o botão -->
+          <div style="font-size: 0.65rem; color: #64748b; margin-top: 4px; text-transform: uppercase; letter-spacing:0.5px; display: flex; align-items: center; gap: 5px;">
+            <span>Time:</span> ${formatarColunaTimeComLink(userDeck)}
+          </div>
         </div>`;
     });
+
 
     if (typeof carregarConflitos === "function") carregarConflitos();
   } catch (error) {
