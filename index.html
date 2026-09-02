@@ -726,7 +726,7 @@ async function carregarRanking() {
     // --- 3. ORDENAÇÃO E PREENCHIMENTO DO RANKING GERAL ---
     jogadores.sort((a, b) => (parseInt(b.pontos) || 0) - (parseInt(a.pontos) || 0));
 
-    const preencherTop = (index, id) => {
+      const preencherTop = (index, id) => {
       const j = jogadores[index];
       const nomeEl = document.getElementById(`${id}-nome`);
       const deckEl = document.getElementById(`${id}-deck`);
@@ -734,12 +734,13 @@ async function carregarRanking() {
       
       if (j) {
         if (nomeEl) nomeEl.innerText = j.nome || "---";
-        if (deckEl) deckEl.innerText = j.baralho || j.deck || "---";
+        // CORREÇÃO: Passa o time pelo formatador para exibir o botão clicável em vez do link cru
+        if (deckEl) deckEl.innerHTML = formatarColunaTimeComLink(j.baralho || j.deck || "");
         if (estrelasEl) estrelasEl.innerText = j.pontos || "0";
       } else {
         if (nomeEl) nomeEl.innerText = "---";
-        if (deckEl) deckEl.innerText = "---";
-        if (estrelasEl) estrelasEl.innerText = "0";
+        if (deckEl) deckEl.innerHTML = "---";
+        if (estrelasEl) starsEl ? starsEl.innerText = "0" : (estrelasEl ? estrelasEl.innerText = "0" : "");
       }
     };
     preencherTop(0, 'top1');
